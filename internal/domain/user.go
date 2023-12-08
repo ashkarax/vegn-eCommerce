@@ -5,10 +5,15 @@ import "gorm.io/gorm"
 type status string
 
 const (
-	Active  status = "active"
 	Blocked status = "blocked"
 	Deleted status = "deleted"
 	Pending status = "pending"
+
+	Active status = "active"
+
+	//only for restaurants
+	verified status = "verified"
+	Rejected status = "rejected"
 )
 
 type Users struct {
@@ -18,5 +23,6 @@ type Users struct {
 	Email    string
 	Phone    string
 	Password string
-	Status   status `gorm:"default:pending"`
+	Status   status  `gorm:"default:pending"`
+	Wallet   float64 `gorm:"default:0"`
 }

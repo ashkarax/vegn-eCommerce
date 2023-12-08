@@ -1,7 +1,8 @@
 package responsemodels
 
 type SignupData struct {
-	Name            string `json:"name,omitempty"`
+	FName           string `json:"first_name,omitempty"`
+	LName           string `json:"last_name,omitempty"`
 	Email           string `json:"email,omitempty"`
 	Phone           string `json:"phone,omitempty"`
 	Password        string `json:"password,omitempty"`
@@ -25,4 +26,14 @@ type UserLoginRes struct {
 	Password     string `json:"password,omitempty"`
 	AccessToken  string `json:"accesstoken,omitempty"`
 	RefreshToken string `json:"refreshtoken,omitempty"`
+}
+
+type UserDetails struct {
+	Id        int    `json:"user_id,omitempty"`
+	FName     string `json:"first_name,omitempty"`
+	LName     string `json:"last_name,omitempty"`
+	Email     string `json:"email,omitempty"`
+	Phone     string `json:"phone,omitempty"`
+	Status    string `json:"status,omitempty"`
+	CreatedAt int    `json:"created_at,omitempty"`
 }

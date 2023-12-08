@@ -7,3 +7,5 @@ type AdminLoginRes struct {
 	Token    string `json:"token,omitempty"`
 	// RefreshToken string `json:"refreshtoken,omitempty"`
 }
+
+

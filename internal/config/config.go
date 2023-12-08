@@ -13,10 +13,10 @@ type DataBase struct {
 }
 
 type Token struct {
-	AdminSecurityKey    string `mapstructure:"ADMIN_TOKENKEY"`
-	SellerSecurityKey   string `mapstructure:"SELLER_TOKENKEY"`
-	UserSecurityKey     string `mapstructure:"USER_TOKENKEY"`
-	TempVerificationKey string `mapstructure:"TEMPERVERY_TOKENKEY"`
+	AdminSecurityKey      string `mapstructure:"ADMIN_TOKENKEY"`
+	RestaurantSecurityKey string `mapstructure:"RESTAURANT_TOKENKEY"`
+	UserSecurityKey       string `mapstructure:"USER_TOKENKEY"`
+	TempVerificationKey   string `mapstructure:"TEMPERVERY_TOKENKEY"`
 }
 
 type OTP struct {
@@ -24,11 +24,24 @@ type OTP struct {
 	AuthToken  string `mapstructure:"TWILIO_AUTH_TOKEN"`
 	ServiceSid string `mapstructure:"TWILIO_SERVICE_SID"`
 }
+type AWS struct {
+	Region     string `mapstructure:"AWS_REGION"`
+	AccessKey  string `mapstructure:"AWS_ACCESS_KEY_ID"`
+	SecrectKey string `mapstructure:"AWS_SECRET_ACCESS_KEY"`
+	Endpoint   string `mapstructure:"AWS_ENDPOINT"`
+}
+
+type RazorPay struct {
+	KeyId      string `mapstructure:"KEY_ID"`
+	SecrectKey string `mapstructure:"KEY_SECRET"`
+}
 
 type Config struct {
-	DB    DataBase
-	Token Token
-	Otp   OTP
+	DB     DataBase
+	Token  Token
+	Otp    OTP
+	AwsS3  AWS
+	RazorP RazorPay
 }
 
 func LoadConfig() (*Config, error) {
@@ -36,6 +49,8 @@ func LoadConfig() (*Config, error) {
 	var db DataBase
 	var token Token
 	var otp OTP
+	var awsS3 AWS
+	var razorP RazorPay
 
 	viper.AddConfigPath("./")
 	viper.SetConfigFile(".env")
@@ -58,7 +73,15 @@ func LoadConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = viper.Unmarshal(&awsS3)
+	if err != nil {
+		return nil, err
+	}
+	err = viper.Unmarshal(&razorP)
+	if err != nil {
+		return nil, err
+	}
 
-	config := Config{DB: db, Token: token, Otp: otp}
+	config := Config{DB: db, Token: token, Otp: otp, AwsS3: awsS3, RazorP: razorP}
 	return &config, nil
 }

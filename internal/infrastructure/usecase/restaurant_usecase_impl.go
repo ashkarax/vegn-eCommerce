@@ -14,17 +14,17 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type SellerUseCase struct {
-	repo  interfaceRepository.IsellerRepo
+type restaurantUseCase struct {
+	repo  interfaceRepository.IrestaurantRepo
 	token config.Token
 }
 
-func NewSellerUseCase(repo interfaceRepository.IsellerRepo, token *config.Token) interfaceUseCase.IsellerUseCase {
-	return &SellerUseCase{repo: repo, token: *token}
+func NewRestaurantUseCase(repo interfaceRepository.IrestaurantRepo, token *config.Token) interfaceUseCase.IrestaurantUseCase {
+	return &restaurantUseCase{repo: repo, token: *token}
 }
 
-func (r *SellerUseCase) SellerSignUp(signUpData *requestmodels.SellerSignUpReq) (responsemodels.SellerSignUpRes, error) {
-	var resSignUp responsemodels.SellerSignUpRes
+func (r *restaurantUseCase) RestaurantSignUp(signUpData *requestmodels.RestaurantSignUpReq) (responsemodels.RestaurantSignUpRes, error) {
+	var resSignUp responsemodels.RestaurantSignUpRes
 
 	validate := validator.New(validator.WithRequiredStructEnabled())
 	err := validate.Struct(signUpData)
@@ -46,8 +46,8 @@ func (r *SellerUseCase) SellerSignUp(signUpData *requestmodels.SellerSignUpReq) 
 				case "Description":
 					resSignUp.Description = "Description should have a minimlum of 10 words "
 
-				case "ContactNo":
-					resSignUp.ContactNo = "should be a valid number include the country code also. "
+				case "Phone":
+					resSignUp.Phone = "should be a valid number include the country code also. "
 
 				case "District":
 					resSignUp.District = "Should be a valid one"
@@ -64,14 +64,14 @@ func (r *SellerUseCase) SellerSignUp(signUpData *requestmodels.SellerSignUpReq) 
 		}
 	}
 
-	if isSellerExist := r.repo.IsSellerExist(signUpData.ContactNo); isSellerExist {
-		resSignUp.SellerExist = "restuarant exist with this number,change phone number"
+	if isRestaurantExist := r.repo.IsRestaurantExist(signUpData.Phone); isRestaurantExist {
+		resSignUp.RestaurantExist = "restuarant exist with this number,change phone number"
 		return resSignUp, errors.New("restuarant exists, try again with another phone number")
 	}
 	hashedPassword := hashpassword.HashPassword(signUpData.ConfirmPassword)
 	signUpData.Password = hashedPassword
 
-	r.repo.CreateSeller(signUpData)
+	r.repo.CreateRestaurant(signUpData)
 	if err != nil {
 		resSignUp.Result = err.Error()
 		return resSignUp, err
@@ -82,8 +82,8 @@ func (r *SellerUseCase) SellerSignUp(signUpData *requestmodels.SellerSignUpReq) 
 
 }
 
-func (r *SellerUseCase) SellerLogin(loginData *requestmodels.SellerLoginReq) (responsemodels.SellerLoginRes, error) {
-	var resLogin responsemodels.SellerLoginRes
+func (r *restaurantUseCase) RestaurantLogin(loginData *requestmodels.RestaurantLoginReq) (responsemodels.RestaurantLoginRes, error) {
+	var resLogin responsemodels.RestaurantLoginRes
 
 	validate := validator.New(validator.WithRequiredStructEnabled())
 	err := validate.Struct(loginData)
@@ -103,7 +103,7 @@ func (r *SellerUseCase) SellerLogin(loginData *requestmodels.SellerLoginReq) (re
 		}
 	}
 
-	hashedPassword, sellerId, status, errr := r.repo.GetHashPassAndStatus(loginData.Phone)
+	hashedPassword, RestaurantId, status, errr := r.repo.GetHashPassAndStatus(loginData.Phone)
 	if errr != nil {
 		fmt.Println(errr)
 		resLogin.Result = errr.Error()
@@ -124,12 +124,12 @@ func (r *SellerUseCase) SellerLogin(loginData *requestmodels.SellerLoginReq) (re
 		return resLogin, errors.New("restaurant is on status pending,not verified by admin yet")
 	}
 
-	accessToken, accessTokenerr := jwttoken.GenerateAcessToken(r.token.SellerSecurityKey, sellerId)
+	accessToken, accessTokenerr := jwttoken.GenerateAcessToken(r.token.RestaurantSecurityKey, RestaurantId)
 	if err != nil {
 		return resLogin, accessTokenerr
 	}
 
-	refreshToken, refreshTokenerr := jwttoken.GenerateRefreshToken(r.token.SellerSecurityKey)
+	refreshToken, refreshTokenerr := jwttoken.GenerateRefreshToken(r.token.RestaurantSecurityKey)
 	if err != nil {
 		return resLogin, refreshTokenerr
 	}
@@ -139,3 +139,29 @@ func (r *SellerUseCase) SellerLogin(loginData *requestmodels.SellerLoginReq) (re
 
 	return resLogin, nil
 }
+
+
+
+func (r *restaurantUseCase) RestaurantsByStatus(status string)(*[]responsemodels.RestuarntDetails,error){
+	
+	verResMap,err :=r.repo.GetRestaurantsByStatus(status)
+	if err != nil{
+		return verResMap,err
+	}
+return verResMap,nil
+
+}
+
+func (r *restaurantUseCase) ChangeRestaurantStatusById(id int,status string) error{
+
+	err:=r.repo.ChangeRestaurantStatusById(id ,status)
+	if err != nil{
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}
+
+
+
+

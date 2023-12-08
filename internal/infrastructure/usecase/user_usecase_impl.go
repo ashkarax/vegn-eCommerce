@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+
 	"github.com/ashkarax/vegn-eCommerce/internal/config"
 	interfaceRepository "github.com/ashkarax/vegn-eCommerce/internal/infrastructure/repository/interfaces"
 	interfaceUseCase "github.com/ashkarax/vegn-eCommerce/internal/infrastructure/usecase/interfaces"
@@ -33,7 +34,9 @@ func (r *UserUsecase) UserSignUp(userData *requestmodels.UserSignUpReq) (respons
 			for _, e := range ve {
 				switch e.Field() {
 				case "FirstName":
-					resSignUp.Name = "should be a valid Name. "
+					resSignUp.FName = "should be a valid Name. "
+				case "LastName":
+					resSignUp.LName = "should be a valid Name. "
 				case "Phone":
 					resSignUp.Phone = "should include the country code also. "
 				case "Email":
@@ -183,4 +186,78 @@ func (r *UserUsecase) UserLogin(loginData *requestmodels.UserLoginReq) (response
 	resLogin.RefreshToken = refreshToken
 	return resLogin, nil
 
+}
+
+//from admin handler
+
+func (r *UserUsecase) GetLatestUsers() (*[]responsemodels.UserDetails, error) {
+
+	userDataMap, err := r.repo.GetLatestUsers()
+	if err != nil {
+		return userDataMap, err
+	}
+	return userDataMap, nil
+
+}
+func (r *UserUsecase) SearchUserByIdOrName(id int, name string) (*[]responsemodels.UserDetails, error) {
+
+	userDataMap, err := r.repo.SearchUserByIdOrName(id, name)
+	if err != nil {
+		return userDataMap, err
+	}
+	return userDataMap, nil
+}
+
+func (r *UserUsecase) ChangeUserStatusById(id int, status string) error {
+	err := r.repo.ChangeUserStatusById(id, status)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UserUsecase) UserByStatus(status string) (*[]responsemodels.UserDetails, error) {
+	verResMap, err := r.repo.GetUserByStatus(status)
+	if err != nil {
+		return verResMap, err
+	}
+	return verResMap, nil
+}
+
+func (r *UserUsecase) UserProfile(id *string) (*responsemodels.UserDetails, error) {
+
+	userData, err := r.repo.GetUserProfile(id)
+	if err != nil {
+		return userData, err
+	}
+	return userData, nil
+}
+
+func (r *UserUsecase) EditUserData(editData *requestmodels.UserEditProf) (*responsemodels.UserDetails, error) {
+	var resEdit responsemodels.UserDetails
+
+	validate := validator.New(validator.WithRequiredStructEnabled())
+	err := validate.Struct(editData)
+	if err != nil {
+		if ve, ok := err.(validator.ValidationErrors); ok {
+			for _, e := range ve {
+				switch e.Field() {
+				case "FirstName":
+					resEdit.FName = "should be a valid Name. "
+				case "LastName":
+					resEdit.LName = "should be a valid Name. "
+				case "Email":
+					resEdit.Email = "should be a valid email address. "
+
+				}
+			}
+			return &resEdit, errors.New("did't fullfill the login requirement ")
+		}
+	}
+
+	errQ := r.repo.EditUserDetails(editData)
+	if errQ != nil {
+		return &resEdit, errQ
+	}
+	return &resEdit, nil
 }

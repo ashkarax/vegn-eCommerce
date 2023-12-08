@@ -1,6 +1,7 @@
 package jwttoken
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -25,7 +26,6 @@ func GenerateRefreshToken(secretKey string) (string, error) {
 
 }
 
-
 func GenerateAcessToken(securityKey string, id string) (string, error) {
 	claims := jwt.MapClaims{
 		"exp": time.Now().Unix() + 300,
@@ -40,8 +40,6 @@ func GenerateAcessToken(securityKey string, id string) (string, error) {
 	return tokenString, nil
 }
 
-
-
 func TempTokenForOtpVerification(securityKey string, phone string) (string, error) {
 	claims := jwt.MapClaims{
 		"phone": phone,
@@ -55,7 +53,7 @@ func TempTokenForOtpVerification(securityKey string, phone string) (string, erro
 }
 
 func UnbindPhoneFromClaim(tokenString string, tempVerificationKey string) (string, error) {
-	
+
 	secret := []byte(tempVerificationKey)
 	parsedToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return secret, nil
@@ -71,3 +69,32 @@ func UnbindPhoneFromClaim(tokenString string, tempVerificationKey string) (strin
 	return phone, nil
 }
 
+func VerifyRefreshToken(accesToken string, securityKey string) error {
+	key := []byte(securityKey)
+	_, err := jwt.Parse(accesToken, func(token *jwt.Token) (interface{}, error) {
+		return key, nil
+	})
+	if err != nil {
+		return errors.New("token tampered or expired")
+	}
+
+	return nil
+}
+
+func VerifyAccessToken(token string, secretkey string) (string, error) {
+	key := []byte(secretkey)
+	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return key, nil
+	})
+	if err != nil && parsedToken==nil{
+		return "", errors.New(" token tamperd")
+	}
+
+	if parsedToken == nil {
+		return "", errors.New(" token tamperd or expired")
+	}
+	claims := parsedToken.Claims.(jwt.MapClaims)
+	id := claims["id"].(string)
+
+	return id, nil
+}

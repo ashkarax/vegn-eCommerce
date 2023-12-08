@@ -24,10 +24,30 @@ func ConnectDatabase(config config.DataBase) (*gorm.DB, error) {
 	if err := DB.AutoMigrate(&domain.Users{}); err != nil {
 		return DB, err
 	}
-	if err := DB.AutoMigrate(&domain.Seller{}); err != nil {
+	if err := DB.AutoMigrate(&domain.Restaurant{}); err != nil {
 		return DB, err
 	}
-
+	if err := DB.AutoMigrate(&domain.Dish{}); err != nil {
+		return DB, err
+	}
+	if err := DB.AutoMigrate(&domain.Address{}); err != nil {
+		return DB, err
+	}
+	if err := DB.AutoMigrate(&domain.Cart{}); err != nil {
+		return DB, err
+	}
+	if err := DB.AutoMigrate(&domain.Order{}); err != nil {
+		return DB, err
+	}
+	if err := DB.AutoMigrate(&domain.OrderedItems{}); err != nil {
+		return DB, err
+	}
+	if err := DB.AutoMigrate(&domain.Coupon{}); err != nil {
+		return DB, err
+	}
+	if err := DB.AutoMigrate(&domain.Category{}); err != nil {
+		return DB, err
+	}
 	CheckAndCreateAdmin(DB)
 	return DB, nil
 
