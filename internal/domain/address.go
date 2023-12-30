@@ -4,8 +4,10 @@ import "gorm.io/gorm"
 
 type Address struct {
 	gorm.Model
-	UserID         uint   `gorm:"not null"`
-	User           Users  `gorm:"foreignKey:UserID"`
+	UserID uint  `gorm:"not null"`
+	User   Users `gorm:"foreignKey:UserID"`
+
+	AddressName    string 
 	Line1          string `gorm:"not null"`
 	Street         string `gorm:"not null"`
 	City           string `gorm:"not null"`

@@ -28,6 +28,16 @@ func (d *CategoryRepo) CheckCategoryExists(categoryName *string) error {
 	return nil
 
 }
+func (d *CategoryRepo) CheckCategoryExistsById(categoryId *string) error {
+	var count uint
+	query := "SELECT COUNT(*) FROM categories WHERE category_id = ? AND category_status = 'active';"
+	d.DB.Raw(query, categoryId).Scan(&count)
+	if count == 0 {
+		return errors.New("category does not exist or not active")
+	}
+	return nil
+
+}
 
 func (d *CategoryRepo) AddNewCategory(categ *requestmodels.CategoryReq) (*string, error) {
 	var categoryId string
@@ -105,4 +115,83 @@ func (d *CategoryRepo) FetchActiveCategories() (*[]responsemodels.CategoryRes, e
 
 	return &categorySlice, nil
 
+}
+
+// restaurant side
+func (d *CategoryRepo) CheckCategoryOfferExists(CategoryID *string, RestaurantID *string) error {
+	var count uint
+	query := "SELECT COUNT(*) FROM category_offers WHERE category_id = ? AND restaurant_id=? AND offer_status = 'active' AND end_date> now();"
+	d.DB.Raw(query, CategoryID, RestaurantID).Scan(&count)
+	if count != 0 {
+		return errors.New("restaurant already have an existing offer on this category,try editing it or delete the old one")
+	}
+	return nil
+
+}
+
+func (d *CategoryRepo) CreateNewCategoryOffer(categ *requestmodels.CategoryOfferReq) (*string, error) {
+	var categoryOfferId string
+	query := "INSERT INTO category_offers (offer_title,category_id,restaurant_id,discount_percentage,start_date,end_date) VALUES (?,?,?,?,NOW(),?) RETURNING category_offer_id;"
+
+	err := d.DB.Raw(query,
+		categ.Title, categ.CategoryID, categ.RestaurantID, categ.CategoryDiscount, categ.EndDate,
+	).Scan(&categoryOfferId).Error
+	if err != nil {
+		return &categoryOfferId, err
+	}
+
+	return &categoryOfferId, nil
+}
+
+func (d *CategoryRepo) GetAllCategoryOffersByRestId(restId *string) (*[]responsemodels.CategoryOfferRes, error) {
+	var categoryOffersSlice []responsemodels.CategoryOfferRes
+
+	query := "SELECT * FROM category_offers WHERE restaurant_id=? AND offer_status='active' AND end_date> now()"
+	result := d.DB.Raw(query, restId).Scan(&categoryOffersSlice)
+	if result.RowsAffected == 0 {
+		return &categoryOffersSlice, errors.New("no active offers exists for this seller")
+	}
+	if result.Error != nil {
+		return &categoryOffersSlice, result.Error
+	}
+
+	return &categoryOffersSlice, nil
+
+}
+
+func (d *CategoryRepo) UpdateCategoryOffer(categ *requestmodels.EditCategoryOffer) (*responsemodels.CategoryOfferRes, error) {
+	var updatedRes responsemodels.CategoryOfferRes
+	query := "UPDATE category_offers SET offer_title=?,discount_percentage=?,start_date=NOW(),end_date=? RETURNING *;"
+
+	err := d.DB.Raw(query,
+		categ.Title, categ.CategoryDiscount, categ.EndDate,
+	).Scan(&updatedRes).Error
+	if err != nil {
+		return &updatedRes, err
+	}
+
+	return &updatedRes, nil
+}
+
+func (d *CategoryRepo) ChangeCategoryOfferStatus(id *string, newStat *string) error {
+	query := "UPDATE category_offers SET offer_status=? WHERE category_offer_id=?"
+	err := d.DB.Exec(query, newStat, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func (d *CategoryRepo) GetCategoryOfferStat(id *string) (*string, error) {
+	var stat string
+	query := "SELECT offer_status FROM category_offers WHERE category_offer_id=? AND offer_status!='deleted' AND end_date >now()"
+	res := d.DB.Raw(query, id).Scan(&stat)
+	if res.Error != nil {
+		return &stat, res.Error
+	}
+	if res.RowsAffected == 0 {
+		return &stat, errors.New("Category-Offer with this id does not exist,already deleted or expired")
+	}
+	return &stat, nil
 }

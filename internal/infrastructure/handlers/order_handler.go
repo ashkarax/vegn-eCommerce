@@ -1,13 +1,16 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	interfaceUseCase "github.com/ashkarax/vegn-eCommerce/internal/infrastructure/usecase/interfaces"
 	requestmodels "github.com/ashkarax/vegn-eCommerce/internal/models/request_models"
 	responsemodels "github.com/ashkarax/vegn-eCommerce/internal/models/response_models"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type OrderHandler struct {
@@ -131,52 +134,149 @@ func (u *OrderHandler) ReturnOrder(c *gin.Context) {
 
 }
 
-func (u *OrderHandler) ChangeStatusToPreparing(c *gin.Context) {
+func (u *OrderHandler) ChangeStatus(c *gin.Context) {
+	var changeStat requestmodels.ChangeStatus
+
 	restaurantId, _ := c.Get("RestaurantId")
-	restaurantIdString, _ := restaurantId.(string)
-	ordereditemsid := c.Param("ordereditemsid")
-	err := u.OrderUseCase.ChangeStatusToPreparing(&restaurantIdString, &ordereditemsid)
+	changeStat.RestaurantId = restaurantId.(string)
+
+	if err := c.BindJSON(&changeStat); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	validate := validator.New(validator.WithRequiredStructEnabled())
+	errValidate := validate.Struct(changeStat)
+	if errValidate != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": errValidate.Error()})
+		return
+	}
+
+	if changeStat.Status == "preparing" {
+		err := u.OrderUseCase.ChangeStatusToPreparing(&changeStat.RestaurantId, &changeStat.OrderedItemsID)
+		if err != nil {
+			response := responsemodels.Responses(http.StatusBadRequest, "failed to change order status", nil, err.Error())
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+		endres := fmt.Sprintf("order having ordereditemsid=%s status changed to preparing succesfully", changeStat.OrderedItemsID)
+		response := responsemodels.Responses(http.StatusOK, endres, nil, nil)
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	if changeStat.Status == "outfordelivery" {
+		err := u.OrderUseCase.ChangeStatusToOutForDelivery(&changeStat.RestaurantId, &changeStat.OrderedItemsID)
+		if err != nil {
+			response := responsemodels.Responses(http.StatusBadRequest, "failed to change order status", nil, err.Error())
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+		endres := fmt.Sprintf("order having ordereditemsid=%s status changed to out-for-delivery succesfully", changeStat.OrderedItemsID)
+		response := responsemodels.Responses(http.StatusOK, endres, nil, nil)
+		c.JSON(http.StatusOK, response)
+		return
+
+	}
+
+	if changeStat.Status == "deliver" {
+		err := u.OrderUseCase.ChangeStatusToDelivered(&changeStat.RestaurantId, &changeStat.OrderedItemsID)
+		if err != nil {
+			response := responsemodels.Responses(http.StatusBadRequest, "failed to change order status", nil, err.Error())
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+		endres := fmt.Sprintf("order having ordereditemsid=%s status changed to delivered succesfully", changeStat.OrderedItemsID)
+		response := responsemodels.Responses(http.StatusOK, endres, nil, nil)
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	response := responsemodels.Responses(http.StatusBadRequest, "enter a valid status", nil, nil)
+	c.JSON(http.StatusBadRequest, response)
+
+}
+
+func (u *OrderHandler) GenerateInvoice(c *gin.Context) {
+	userId, _ := c.Get("userId")
+	userIdString, _ := userId.(string)
+	orderid := c.Param("orderid")
+
+	pdfURL, err := u.OrderUseCase.GenerateInvoice(&userIdString, &orderid)
 	if err != nil {
-		response := responsemodels.Responses(http.StatusBadRequest, "failed to change order status", nil, err.Error())
+		response := responsemodels.Responses(http.StatusBadRequest, "failed to find order", nil, err.Error())
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	endres := fmt.Sprintf("order having ordereditemsid=%s status changed to preparing succesfully", ordereditemsid)
-	response := responsemodels.Responses(http.StatusOK, endres, nil, nil)
+	endres := fmt.Sprintf("order having ordereditemsid=%s's invoice generated succesfully", orderid)
+	response := responsemodels.Responses(http.StatusOK, endres, pdfURL, nil)
 	c.JSON(http.StatusOK, response)
+
 }
 
-func (u *OrderHandler) ChangeStatusToOutForDelivery(c *gin.Context) {
+func (u *OrderHandler) GenerateSalesReportXlsx(c *gin.Context) {
 	restaurantId, _ := c.Get("RestaurantId")
-	restaurantIdString, _ := restaurantId.(string)
-	ordereditemsid := c.Param("ordereditemsid")
-	err := u.OrderUseCase.ChangeStatusToOutForDelivery(&restaurantIdString, &ordereditemsid)
+	restaurantIdtring, _ := restaurantId.(string)
+
+	xlsxURL, err := u.OrderUseCase.GenerateSalesReportXlsx(&restaurantIdtring)
 	if err != nil {
-		response := responsemodels.Responses(http.StatusBadRequest, "failed to change order status", nil, err.Error())
+		response := responsemodels.Responses(http.StatusBadRequest, "failed to generate Sales Report", nil, err.Error())
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	endres := fmt.Sprintf("order having ordereditemsid=%s status changed to out-for-delivery succesfully", ordereditemsid)
-	response := responsemodels.Responses(http.StatusOK, endres, nil, nil)
+	response := responsemodels.Responses(http.StatusOK, "SalesReport generated succesfully", xlsxURL, nil)
 	c.JSON(http.StatusOK, response)
+
 }
 
-func (u *OrderHandler) ChangeStatusToDelivered(c *gin.Context) {
+func (u *OrderHandler) GetSalesreporCustomDays(c *gin.Context) {
 	restaurantId, _ := c.Get("RestaurantId")
-	restaurantIdString, _ := restaurantId.(string)
-	ordereditemsid := c.Param("ordereditemsid")
-	err := u.OrderUseCase.ChangeStatusToDelivered(&restaurantIdString, &ordereditemsid)
-	if err != nil {
-		response := responsemodels.Responses(http.StatusBadRequest, "failed to change order status", nil, err.Error())
+	restaurantIdtring, _ := restaurantId.(string)
+
+	customDays := c.Param("customdays")
+	_, errConv := strconv.Atoi(customDays)
+
+	if customDays == "" || errConv != nil {
+		response := responsemodels.Responses(http.StatusBadRequest, "failed to generate Sales Report", errConv, errors.New("customDays must be a valid number"))
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	endres := fmt.Sprintf("order having ordereditemsid=%s status changed to delivered succesfully", ordereditemsid)
-	response := responsemodels.Responses(http.StatusOK, endres, nil, nil)
+	returnData, err := u.OrderUseCase.GetSalesReportForCustomDays(&restaurantIdtring, &customDays)
+	if err != nil {
+		response := responsemodels.Responses(http.StatusBadRequest, "failed to generate Sales Report", nil, err.Error())
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := responsemodels.Responses(http.StatusOK, "SalesReport generated succesfully", returnData, nil)
 	c.JSON(http.StatusOK, response)
+
 }
 
-// ordermanagement.PATCH("/:orderid/cancel",order.RestaurantCancelOrder)
+func (u *OrderHandler) GetSalesreporYYMMDD(c *gin.Context) {
+	var yymmdd requestmodels.SalesReportYYMMDD
+	restaurantId, _ := c.Get("RestaurantId")
+	restaurantIdtring, _ := restaurantId.(string)
+
+	if err := c.BindJSON(&yymmdd); err != nil {
+		if err.Error() == "EOF"{
+			c.JSON(http.StatusBadRequest, gin.H{"error": "no json input found in your request"})
+		return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	returnData, err := u.OrderUseCase.GetSalesreporYYMMDD(&restaurantIdtring, &yymmdd)
+	if err != nil {
+		response := responsemodels.Responses(http.StatusBadRequest, "failed to generate Sales Report", nil, err.Error())
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := responsemodels.Responses(http.StatusOK, "SalesReport generated succesfully", returnData, nil)
+	c.JSON(http.StatusOK, response)
+
+}

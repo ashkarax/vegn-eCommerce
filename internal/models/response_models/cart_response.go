@@ -1,17 +1,26 @@
 package responsemodels
 
+import "time"
+
 type CartItemInfo struct {
-	CartID            uint    `json:"cart_id" `
-	Name              string  `json:"productname" `
-	DishID            string  `json:"DishID"`
-	RestaurantID      string  `json:"RestaurantID"`
-	Quantity          uint    `json:"quantity"`
-	Price             float64 `json:"price"`
-	ImageURL1         string  `json:"image_url1" `
-	ImageURL2         string  `json:"image_url2,omitempty" `
-	ImageURL3         string  `json:"image_url3,omitempty" `
-	Availability      bool    `json:"availability" `
-	RemainingQuantity uint    `json:"remaining_quantity,omitempty" `
+	CartID             uint      `json:"cart_id" `
+	Name               string    `json:"productname" `
+	DishID             string    `json:"DishID"`
+	RestaurantID       string    `json:"RestaurantID"`
+	RestaurantName     string    `json:"restaurant_name"`
+	Quantity           uint      `json:"quantity"`
+	MRP                float64   `json:"MRP"`
+	PromotionDiscount  uint      `json:"promotion_discount"`
+	Price              float64   `json:"price_after_promotion_discount"`
+	OfferTitle         string    `json:"category_discount_title,omitempty"`
+	DiscountPercentage uint      `json:"discountPercentage,omitempty"`
+	SalePrice          float64   `json:"sale_price"`
+	EndDate            time.Time `json:"end_date,omitempty"`
+	ImageURL1          string    `json:"image_url1" `
+	Availability       bool      `json:"availability" `
+
+	RemainingQuantity uint `json:"null,omitempty"`
+	CategoryOfferID   uint `json:"null,omitempty"`
 }
 
 type CartDetailsResp struct {

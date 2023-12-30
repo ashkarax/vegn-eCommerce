@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserRoutes(engin *gin.RouterGroup, user *handlers.UserHandler, dish *handlers.DishHandler, address *handlers.AddressHandler, cart *handlers.CartHandler, order *handlers.OrderHandler, payment *handlers.PaymentHandler,category *handlers.CategoryHandler, JWTmiddleware *middlewares.TokenRequirements) {
+func UserRoutes(engin *gin.RouterGroup, user *handlers.UserHandler, dish *handlers.DishHandler, address *handlers.AddressHandler, cart *handlers.CartHandler, order *handlers.OrderHandler, payment *handlers.PaymentHandler, category *handlers.CategoryHandler, JWTmiddleware *middlewares.TokenRequirements) {
 
 	engin.POST("/signup", user.UserSignUp)
 	engin.POST("/verify", user.UserOTPVerication)
@@ -15,7 +15,6 @@ func UserRoutes(engin *gin.RouterGroup, user *handlers.UserHandler, dish *handle
 	categorymanagement := engin.Group("/category")
 	{
 		categorymanagement.GET("/", category.FetchActiveCategories)
-
 
 	}
 	paymentmanagement := engin.Group("/payment")
@@ -29,8 +28,6 @@ func UserRoutes(engin *gin.RouterGroup, user *handlers.UserHandler, dish *handle
 		dishmanagement.GET("/:categoryid", dish.FetchDishesByCategoryId)
 		// 	dishmanagement.GET("/search",Dish.SearchDishOrRestaurant)
 	}
-
-
 
 	engin.Use(JWTmiddleware.UserAuthorization)
 	{
@@ -51,7 +48,7 @@ func UserRoutes(engin *gin.RouterGroup, user *handlers.UserHandler, dish *handle
 
 		cartmanagement := engin.Group("/cart")
 		{
-			cartmanagement.POST("/:dishid/addtocart", cart.AddToCart)
+			cartmanagement.POST("/addtocart/:dishid", cart.AddToCart)
 			cartmanagement.GET("/", cart.GetCartDetailsOfUser)
 			cartmanagement.DELETE("/:dishid", cart.DecrementorRemoveFromCart)
 		}
@@ -59,8 +56,10 @@ func UserRoutes(engin *gin.RouterGroup, user *handlers.UserHandler, dish *handle
 		{
 			ordermanagement.POST("/", order.PlaceNewOrder)
 			ordermanagement.GET("/", order.GetAllOrders)
-			ordermanagement.PATCH("/:ordereditemsid/cancel", order.CancelOrder)
-			ordermanagement.PATCH("/:ordereditemsid/return", order.ReturnOrder)
+			ordermanagement.PATCH("/cancel/:ordereditemsid", order.CancelOrder)
+			ordermanagement.PATCH("/return/:ordereditemsid", order.ReturnOrder)
+			ordermanagement.GET("/invoice/:orderid", order.GenerateInvoice)
+
 		}
 		paymentmanagement := engin.Group("/payments")
 		{

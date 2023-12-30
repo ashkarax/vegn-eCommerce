@@ -7,6 +7,7 @@ import (
 
 type ICategoryRepository interface {
 	CheckCategoryExists(*string) error
+	CheckCategoryExistsById(*string) error
 	AddNewCategory(*requestmodels.CategoryReq) (*string, error)
 
 	GetAllCategories() (*[]responsemodels.CategoryRes, error)
@@ -15,4 +16,13 @@ type ICategoryRepository interface {
 	UpdateCategorybyId(*requestmodels.CategoryReq) (*string, error)
 
 	FetchActiveCategories() (*[]responsemodels.CategoryRes, error)
+
+	CheckCategoryOfferExists(*string, *string) error
+	CreateNewCategoryOffer(*requestmodels.CategoryOfferReq) (*string, error)
+	GetAllCategoryOffersByRestId(*string) (*[]responsemodels.CategoryOfferRes, error)
+
+	UpdateCategoryOffer(*requestmodels.EditCategoryOffer) (*responsemodels.CategoryOfferRes, error)
+
+	ChangeCategoryOfferStatus(*string, *string) error
+	GetCategoryOfferStat(*string) (*string, error)
 }

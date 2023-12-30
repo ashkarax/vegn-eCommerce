@@ -23,7 +23,7 @@ func InitializeAPI(config config.Config) (*server.ServerHttp, error) {
 	}
 
 	twilio.OTPServiceSetup(config.Otp)
-	aws.AWSS3ImageUploaderSetup(config.AwsS3)
+	aws.AWSS3FileUploaderSetup(config.AwsS3)
 
 	JWTRepository := repository.NewJWTRepo(DB)
 	JWTUseCase := usecase.NewJWTUseCase(JWTRepository)
@@ -41,12 +41,12 @@ func InitializeAPI(config config.Config) (*server.ServerHttp, error) {
 	adminUseCase := usecase.NewAdminUseCase(adminRepository, &config.Token)
 	adminHandler := handlers.NewAdminHandler(adminUseCase, restaurantUsecase, userUseCase)
 
-	categoryRepository:=repository.NewCategoryRepo(DB)
-	categoryUseCase:=usecase.NewCategoryUseCase(categoryRepository)
-	categoryHandler:=handlers.NewCategoryHandler(categoryUseCase)
+	categoryRepository := repository.NewCategoryRepo(DB)
+	categoryUseCase := usecase.NewCategoryUseCase(categoryRepository)
+	categoryHandler := handlers.NewCategoryHandler(categoryUseCase)
 
 	dishRepository := repository.NewDishRepo(DB)
-	dishUseCase := usecase.NewDishUseCase(dishRepository)
+	dishUseCase := usecase.NewDishUseCase(dishRepository, categoryRepository)
 	dishHandler := handlers.NewDishHandler(dishUseCase)
 
 	addressRepository := repository.NewAddressRepo(DB)
@@ -57,19 +57,18 @@ func InitializeAPI(config config.Config) (*server.ServerHttp, error) {
 	cartUseCase := usecase.NewCartUseCase(cartRepository, dishRepository)
 	cartHandler := handlers.NewCartHandler(cartUseCase)
 
-	couponRepository:=repository.NewCouponRepo(DB)
-	couponUseCase:=usecase.NewCouponUseCase(couponRepository)
-	couponHandler:=handlers.NewCouponHandler(couponUseCase)
+	couponRepository := repository.NewCouponRepo(DB)
+	couponUseCase := usecase.NewCouponUseCase(couponRepository)
+	couponHandler := handlers.NewCouponHandler(couponUseCase)
 
 	orderRepository := repository.NewOrderRepo(DB)
-	orderUseCase := usecase.NewOrderUseCase(orderRepository, cartRepository, dishRepository, addressRepository,userRepository,couponRepository,restaurantRepository,&config.RazorP)
+	orderUseCase := usecase.NewOrderUseCase(orderRepository, cartRepository, dishRepository, addressRepository, userRepository, couponRepository, restaurantRepository, &config.RazorP)
 	orderHandler := handlers.NewOrderHandler(orderUseCase)
 
-	paymentUseCase:=usecase.NewPaymentUsecase(orderRepository, cartRepository,&config.RazorP)
-	paymentHandler:=handlers.NewPaymentHandler(paymentUseCase)
+	paymentUseCase := usecase.NewPaymentUsecase(orderRepository, cartRepository, &config.RazorP)
+	paymentHandler := handlers.NewPaymentHandler(paymentUseCase)
 
-
-	serverHttp := server.NewServerHttp(adminHandler, userHandler, restaurantHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler,couponHandler,categoryHandler,JWTmiddleware)
+	serverHttp := server.NewServerHttp(adminHandler, userHandler, restaurantHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler, couponHandler, categoryHandler, JWTmiddleware)
 
 	return serverHttp, nil
 

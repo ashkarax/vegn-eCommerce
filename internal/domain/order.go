@@ -40,8 +40,6 @@ type Order struct {
 	RazorPayId string `gorm:"default:nil"`
 
 	OrderDate time.Time `gorm:"not null"`
-
-	FinalAmount float64 `gorm:"default:0"`
 }
 
 type OrderedItems struct {
@@ -54,6 +52,12 @@ type OrderedItems struct {
 	Dish   Dish `gorm:"foreignKey:DishID"`
 
 	OrderQuantity uint
+
+	MRP               float64 `gorm:"default:0"`
+	PromotionDiscount uint    `gorm:"default:0"`
+
+	CategoryOfferId    uint    `gorm:" default:0"`
+	DiscountPercentage float64 `gorm:" default:0"`
 
 	DishPrice float64
 

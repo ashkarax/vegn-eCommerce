@@ -84,7 +84,6 @@ func (u *DishHandler) UpdateDishDetails(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	resDishData, err := u.DishUseCase.UpdateDishDetails(&dishData, &num)
 	if err != nil {
 		response := responsemodels.Responses(http.StatusBadRequest, "can't update Dish", resDishData, err.Error())
@@ -111,18 +110,18 @@ func (u *DishHandler) DeleteDish(c *gin.Context) {
 func (u *DishHandler) GetAllDishesForUser(c *gin.Context) {
 	dishMap, err := u.DishUseCase.GetAllDishesForUser()
 	if err != nil {
-		response := responsemodels.Responses(http.StatusBadRequest, "can't delete Dish", dishMap, err.Error())
+		response := responsemodels.Responses(http.StatusBadRequest, "can't fetch Dishes", dishMap, err.Error())
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	response := responsemodels.Responses(http.StatusOK, "dish deleted succesfully", dishMap, nil)
+	response := responsemodels.Responses(http.StatusOK, "dishes fetched succesfully", dishMap, nil)
 	c.JSON(http.StatusOK, response)
 }
 
 func (u *DishHandler) FetchDishesByCategoryId(c *gin.Context) {
 	categoryid := c.Param("categoryid")
-	dishSlice,err := u.DishUseCase.FetchDishesByCategoryId(&categoryid)
+	dishSlice, err := u.DishUseCase.FetchDishesByCategoryId(&categoryid)
 	if err != nil {
 		response := responsemodels.Responses(http.StatusBadRequest, "can't fetch Dish", nil, err.Error())
 		c.JSON(http.StatusBadRequest, response)
@@ -132,4 +131,3 @@ func (u *DishHandler) FetchDishesByCategoryId(c *gin.Context) {
 	response := responsemodels.Responses(http.StatusOK, "dishs fetched", dishSlice, nil)
 	c.JSON(http.StatusOK, response)
 }
-

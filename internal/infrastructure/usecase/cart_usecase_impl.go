@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"math"
+
 	interfaceRepository "github.com/ashkarax/vegn-eCommerce/internal/infrastructure/repository/interfaces"
 	interfaceUseCase "github.com/ashkarax/vegn-eCommerce/internal/infrastructure/usecase/interfaces"
 	responsemodels "github.com/ashkarax/vegn-eCommerce/internal/models/response_models"
@@ -22,6 +24,7 @@ func (r *CartUseCase) AddToCart(userIdString *string, dishId *string) error {
 		return erro
 	}
 	if alreadyExistStat {
+
 		errIncr := r.CartRepo.IncrementDishCountInCart(userIdString, dishId)
 		if errIncr != nil {
 			return errIncr
@@ -49,12 +52,15 @@ func (r *CartUseCase) GetCartDetails(userIdString *string) (*responsemodels.Cart
 	if err != nil {
 		return &cartResp, err
 	}
+	for i, dish := range *cartItemsInfo {
+		(*cartItemsInfo)[i].SalePrice = math.Ceil(dish.Price - (dish.Price * float64(dish.DiscountPercentage) / 100))
+	}
 
 	totalPrice := 0.0
-	var quantitySum uint 
+	var quantitySum uint
 	for _, item := range *cartItemsInfo {
-		totalPrice += float64(item.Quantity) * item.Price
-		quantitySum+=item.Quantity
+		totalPrice += float64(item.Quantity) * item.SalePrice
+		quantitySum += item.Quantity
 	}
 
 	cartResp.Cart = cartItemsInfo
@@ -64,14 +70,14 @@ func (r *CartUseCase) GetCartDetails(userIdString *string) (*responsemodels.Cart
 	return &cartResp, nil
 }
 
-func (r *CartUseCase) DeleteFromCart(dishId *string,userId *string) error{
+func (r *CartUseCase) DeleteFromCart(dishId *string, userId *string) error {
 
 	quantity, erro := r.CartRepo.ReturnQuantityOfCartItem(userId, dishId)
 	if erro != nil {
 		return erro
 	}
 
-	if *quantity>1 {
+	if *quantity > 1 {
 		errIncr := r.CartRepo.DecrementDishCountInCart(userId, dishId)
 		if errIncr != nil {
 			return errIncr
@@ -79,7 +85,7 @@ func (r *CartUseCase) DeleteFromCart(dishId *string,userId *string) error{
 		return nil
 	}
 
-	err := r.CartRepo.DeleteFromCart(dishId,userId)
+	err := r.CartRepo.DeleteFromCart(dishId, userId)
 	if err != nil {
 		return err
 	}

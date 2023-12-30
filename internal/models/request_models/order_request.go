@@ -18,3 +18,9 @@ type CanOrRetReq struct {
 	OrderedItemsID string
 	RestaurantID   string
 }
+
+type ChangeStatus struct {
+	RestaurantId   string
+	OrderedItemsID string `json:"ordered_items_id" validate:"required"`
+	Status         string `json:"status" validate:"required,lte=20"`
+}

@@ -50,7 +50,7 @@ func (d *CartRepo) IncrementDishCountInCart(userIdString *string, dishId *string
 func (d *CartRepo) FetchCartItemsofUser(userID *string) (*[]responsemodels.CartItemInfo, error) {
 	var cartItemsInfoSlice []responsemodels.CartItemInfo
 
-	query := "SELECT carts.cart_id,carts.quantity,carts.dish_id,dishes.name,dishes.restaurant_id,dishes.price,dishes.image_url1,dishes.image_url2,dishes.image_url3,dishes.availability,dishes.remaining_quantity FROM carts INNER JOIN dishes ON carts.dish_id=dishes.id WHERE carts.user_id=?"
+	query := "SELECT carts.cart_id,carts.quantity, carts.dish_id,dishes.name, dishes.restaurant_id,dishes.price,dishes.image_url1,dishes.availability,dishes.mrp,dishes.promotion_discount,dishes.remaining_quantity,restaurants.restaurant_name,category_offers.category_offer_id,category_offers.offer_title,category_offers.discount_percentage,category_offers.end_date FROM  carts INNER JOIN dishes ON carts.dish_id = dishes.id    INNER JOIN restaurants ON carts.restaurant_id = restaurants.id   LEFT JOIN category_offers ON category_offers.category_id = dishes.category_id AND category_offers.restaurant_id = dishes.restaurant_id AND category_offers.offer_status = 'active' AND category_offers.end_date >= NOW() WHERE carts.user_id = ?;"
 	result := d.DB.Raw(query, userID).Scan(&cartItemsInfoSlice)
 	if result.Error != nil {
 		return nil, result.Error

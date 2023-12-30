@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"bytes"
 	"fmt"
 	"mime/multipart"
 
@@ -10,8 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/google/uuid"
 )
-
 
 type awsS3Service struct {
 	s3Credentials config.AWS
@@ -19,7 +20,7 @@ type awsS3Service struct {
 
 var awss3service awsS3Service
 
-func AWSS3ImageUploaderSetup(data config.AWS) {
+func AWSS3FileUploaderSetup(data config.AWS) {
 	awss3service.s3Credentials = data
 }
 
@@ -42,7 +43,7 @@ func AWSSessionInitializer() (*session.Session, error) {
 	return sess, nil
 }
 
-func AWSImageUploader(file *multipart.FileHeader, sess *session.Session, bucketFolder *string) (*string, error) {
+func AWSS3ImageUploader(file *multipart.FileHeader, sess *session.Session, bucketFolder *string) (*string, error) {
 	var nullstringresponse string
 
 	image, err := file.Open()
@@ -59,6 +60,7 @@ func AWSImageUploader(file *multipart.FileHeader, sess *session.Session, bucketF
 		Bucket: aws.String(*bucketFolder),
 		Key:    aws.String(*randomName),
 		Body:   image,
+		ACL:    aws.String("public-read"),
 	})
 
 	if err != nil {
@@ -68,4 +70,47 @@ func AWSImageUploader(file *multipart.FileHeader, sess *session.Session, bucketF
 
 	return &upload.Location, nil
 
+}
+
+func AWSS3ByteBufferUploader(content []byte, sess *session.Session, bucketFolder *string) (*string, error) {
+
+	randomName := uuid.New().String()
+
+
+	uploader := s3manager.NewUploader(sess)
+	upload, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(*bucketFolder),
+		Key:    aws.String(randomName),
+		Body:   bytes.NewReader(content),
+		ACL:    aws.String("public-read"),
+	})
+
+	if err != nil {
+		fmt.Println("Error uploading to S3:", err)
+		return &upload.Location, err
+	}
+
+	return &upload.Location, nil
+}
+
+func AWSS3XLSXUploader(content []byte, sess *session.Session, bucketFolder *string) (*string, error) {
+
+	randomName := uuid.New().String()
+
+	verr:=fmt.Sprintf("%s.xlsx",randomName)
+
+	uploader := s3manager.NewUploader(sess)
+	upload, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(*bucketFolder),
+		Key:    aws.String(verr),
+		Body:   bytes.NewReader(content),
+		ACL:    aws.String("public-read"),
+	})
+
+	if err != nil {
+		fmt.Println("Error uploading to S3:", err)
+		return &upload.Location, err
+	}
+
+	return &upload.Location, nil
 }

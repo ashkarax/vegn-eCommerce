@@ -27,15 +27,23 @@ func RestaurantRoutes(engin *gin.RouterGroup, Restaurant *handlers.RestaurantHan
 		{
 			ordermanagement.GET("/", order.FetchAllOrdersForRestaurant)
 			// ordermanagement.GET("/:orderid",order.FetchOrderWithId)
-			ordermanagement.PATCH("/:ordereditemsid/preparing",order.ChangeStatusToPreparing)
-			ordermanagement.PATCH("/:ordereditemsid/outfordeliver",order.ChangeStatusToOutForDelivery)
-			ordermanagement.PATCH("/:ordereditemsid/deliver",order.ChangeStatusToDelivered)
-			// ordermanagement.PATCH("/:ordereditemsid/cancel",order.RestaurantCancelOrder)
+			ordermanagement.PATCH("/status", order.ChangeStatus)
+		}
 
+		salesreportmanagement:=engin.Group("/salesreport")
+		{
+			salesreportmanagement.GET("/",order.GetSalesreporYYMMDD)
+			salesreportmanagement.GET("/:customdays",order.GetSalesreporCustomDays)
+			salesreportmanagement.GET("/xlsx",order.GenerateSalesReportXlsx)
 		}
 		categorymanagement := engin.Group("/category")
 		{
 			categorymanagement.GET("/", category.FetchActiveCategories)
+
+			categorymanagement.GET("/offer", category.GetAllCategoryOffer)
+			categorymanagement.POST("/offer", category.CreateCategoryOffer)
+            categorymanagement.PATCH("/offer/:categoryofferid",category.EditCategoryOffer)
+			categorymanagement.PATCH("/offer",category.ChangeCategoryOfferStatus)
 
 		}
 	}

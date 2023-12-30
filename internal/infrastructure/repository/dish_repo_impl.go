@@ -21,13 +21,13 @@ func NewDishRepo(DB *gorm.DB) interfaceRepository.IDishRepo {
 
 func (d *DishRepo) AddNewDish(dishData *requestmodels.DishReq) error {
 
-	query := "INSERT INTO dishes (restaurant_id, name, description, cuisine_type, price, portion_size, dietary_information, calories,protein,carbohydrates,fat, spice_level, allergen_information, recommended_pairings, special_features, image_url1,image_url2,image_url3, preparation_time, promotion_discount, story_origin) VALUES (?)"
+	query := "INSERT INTO dishes (restaurant_id, name, description, cuisine_type, mrp, portion_size, dietary_information, calories,protein,carbohydrates,fat, spice_level, allergen_information, recommended_pairings, special_features, image_url1,image_url2,image_url3, preparation_time, promotion_discount,price, story_origin) VALUES (?)"
 	values := []interface{}{
 		dishData.RestaurantId,
 		dishData.Name,
 		dishData.Description,
 		dishData.CuisineType,
-		dishData.Price,
+		dishData.MRP,
 		dishData.PortionSize,
 		dishData.DietaryInformation,
 		dishData.Calories,
@@ -43,6 +43,7 @@ func (d *DishRepo) AddNewDish(dishData *requestmodels.DishReq) error {
 		dishData.ImageURL3,
 		dishData.PreparationTime,
 		dishData.PromotionDiscount,
+		dishData.Price,
 		dishData.StoryOrigin,
 	}
 	err := d.DB.Exec(query, values).Error
@@ -83,12 +84,13 @@ func (d *DishRepo) FetchDishById(dishId *int) (*responsemodels.DishRes, error) {
 }
 
 func (d *DishRepo) UpdateDish(dishData *requestmodels.DishUpdateReq, dishId *int) error {
-	query := "UPDATE dishes SET name = ?, description = ?, cuisine_type = ?, price = ?, portion_size = ?, dietary_information = ?,calories = ?, protein = ?, carbohydrates = ?, fat = ?, spice_level = ?, allergen_information = ?,   recommended_pairings = ?, special_features = ?,   preparation_time = ?, promotion_discount = ?, story_origin = ?, availability = ?, remaining_quantity = ? WHERE restaurant_id = ? AND id = ?"
+	query := "UPDATE dishes SET name = ?, category_id = ?,description = ?, cuisine_type = ?, mrp = ?, portion_size = ?, dietary_information = ?,calories = ?, protein = ?, carbohydrates = ?, fat = ?, spice_level = ?, allergen_information = ?,   recommended_pairings = ?, special_features = ?,   preparation_time = ?, promotion_discount = ?,price=?, story_origin = ?, availability = ?, remaining_quantity = ? WHERE restaurant_id = ? AND id = ?"
 	result := d.DB.Exec(query,
 		dishData.Name,
+		dishData.CategoryId,
 		dishData.Description,
 		dishData.CuisineType,
-		dishData.Price,
+		dishData.MRP,
 		dishData.PortionSize,
 		dishData.DietaryInformation,
 		dishData.Calories,
@@ -101,6 +103,7 @@ func (d *DishRepo) UpdateDish(dishData *requestmodels.DishUpdateReq, dishId *int
 		dishData.SpecialFeatures,
 		dishData.PreparationTime,
 		dishData.PromotionDiscount,
+		dishData.Price,
 		dishData.StoryOrigin,
 		dishData.Availability,
 		dishData.RemainingQuantity,
@@ -136,7 +139,8 @@ func (d *DishRepo) DeleteDishById(dishId *string) error {
 }
 func (d *DishRepo) GetAllDishesForUser() (*[]responsemodels.DishRes, error) {
 	var resMap []responsemodels.DishRes
-	r := d.DB.Raw("SELECT * FROM dishes WHERE availability = ? AND remaining_quantity >= ?", true, 1).Scan(&resMap)
+
+	r := d.DB.Raw("SELECT * FROM dishes  LEFT JOIN category_offers  ON category_offers.category_id = dishes.category_id AND category_offers.restaurant_id = dishes.restaurant_id AND category_offers.offer_status = 'active' AND category_offers.end_date >= now() WHERE dishes.availability=true AND dishes.remaining_quantity>0;").Scan(&resMap)
 
 	if r.RowsAffected == 0 {
 		errMessage := fmt.Sprintf("No results found,Rows affected:%d", r.RowsAffected)

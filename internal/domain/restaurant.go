@@ -18,5 +18,5 @@ type Restaurant struct {
 	PinCode         string
 	Status          status  `gorm:"default:pending"`
 	CodWallet       float64 `gorm:"default:0.00"`
-	AdminCredit    float64 `gorm:"default:0.00"` //OnlineWallet
+	AdminCredit     float64 `gorm:"default:0.00"` //OnlineWallet
 }

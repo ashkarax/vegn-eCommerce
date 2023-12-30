@@ -18,15 +18,15 @@ func AdminRoutes(engin *gin.RouterGroup, admin *handlers.AdminHandler, coupon *h
 		{
 
 			restaurantmanagement.GET("/", admin.VerifiedRestuarants)
-			restaurantmanagement.PATCH("/:id/block", admin.BlockRestaurant)
+			restaurantmanagement.PATCH("/block/:id", admin.BlockRestaurant)
 
 			restaurantmanagement.GET("/pending", admin.PendingRestuarants)
-			restaurantmanagement.PATCH("/pending/:id/verify", admin.VerifyRestaurant)
-			restaurantmanagement.PATCH("/pending/:id/reject", admin.RejectRestaurant)
+			restaurantmanagement.PATCH("/pending/verify/:id", admin.VerifyRestaurant)
+			restaurantmanagement.PATCH("/pending/reject/:id", admin.RejectRestaurant)
 
 			restaurantmanagement.GET("/blocked", admin.BlockedRestuarants)
-			restaurantmanagement.PATCH("/blocked/:id/unblock", admin.UnBlockRestaurant)
-			restaurantmanagement.PATCH("/blocked/:id/delete", admin.DeleteRestaurant)
+			restaurantmanagement.PATCH("/blocked/unblock/:id", admin.UnBlockRestaurant)
+			restaurantmanagement.PATCH("/blocked/delete/:id", admin.DeleteRestaurant)
 
 			restaurantmanagement.GET("/rejected", admin.RejectedRestuarants)
 		}
@@ -36,10 +36,10 @@ func AdminRoutes(engin *gin.RouterGroup, admin *handlers.AdminHandler, coupon *h
 			usermanagement.GET("/", admin.LatestUsers)
 			usermanagement.GET("/search", admin.SearchUser)
 
-			usermanagement.PATCH("/:id/block", admin.BlockUser)
+			usermanagement.PATCH("/block/:id", admin.BlockUser)
 
 			usermanagement.GET("/blocked", admin.BlockedUsers)
-			usermanagement.PATCH("/blocked/:id/unblock", admin.UnBlockUser)
+			usermanagement.PATCH("/blocked/unblock/:id", admin.UnBlockUser)
 
 		}
 		couponmanagement := engin.Group("/coupon")
@@ -47,9 +47,9 @@ func AdminRoutes(engin *gin.RouterGroup, admin *handlers.AdminHandler, coupon *h
 			couponmanagement.GET("/", coupon.AllCoupons)
 			couponmanagement.POST("/", coupon.AddNewCoupon)
 			couponmanagement.DELETE("/:couponid", coupon.DeleteCoupon)
-			couponmanagement.PATCH("/:couponid/block", coupon.BlockCoupon)
-			couponmanagement.PATCH("/:couponid/unblock", coupon.UnBlockCoupon)
-			couponmanagement.PATCH("/:couponid/edit", coupon.EditCoupon)
+			couponmanagement.PATCH("/block/:couponid", coupon.BlockCoupon)
+			couponmanagement.PATCH("/unblock/:couponid", coupon.UnBlockCoupon)
+			couponmanagement.PATCH("/edit/:couponid", coupon.EditCoupon)
 
 		}
 		categorymanagement := engin.Group("/category")

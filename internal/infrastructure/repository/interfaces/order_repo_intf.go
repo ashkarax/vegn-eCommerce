@@ -11,8 +11,9 @@ type IOrderRepo interface {
 
 	GetAllOrdersByUser(userId *string) (*[]responsemodels.OrderDetailsResponse, error)
 
-	OrdersForRestaurantById(*string) (*[]responsemodels.OrderDetailsResponse, error)
-
+	// OrdersForRestaurantById(*string) (*[]responsemodels.OrderDetailsResponse, error)
+	OrdersForRestaurantById(*string) (*[]responsemodels.OrderDataFetcherX, error)
+	
 	GetOrderDetailsByOrderId(*string, *string) (*[]responsemodels.RazorpayResponse, error)
 
 	UpdateStatusToSuccess(*string, *string, *string) (*[]responsemodels.OrderDetailsResponse, error)
@@ -24,4 +25,13 @@ type IOrderRepo interface {
 	RestReturnOrderStatus(*string, *string) (*responsemodels.CanOrRetResp, error)
 
 	UpdateDeliveryDate(*string)
+
+	GetOrderDataForPDFByIds(*string, *string) (*responsemodels.OrderDetailsPDF, error)
+	GetOrderDetailsForPDFById(*string) (*[]responsemodels.OrderedItemsDataPDF, error)
+
+	OrdersForSalesReportByRestId(*string) (*[]responsemodels.OrderDetaisForSalesReport, error)
+
+	GetDataSalesReportForCustomDays(*string, *string) (*responsemodels.SalesReportData, error)
+
+	GetDataSalesReportYYMMDD(*string, *requestmodels.SalesReportYYMMDD) (*responsemodels.SalesReportData, error)
 }

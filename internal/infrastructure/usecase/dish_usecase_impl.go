@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"strconv"
 
@@ -15,11 +16,12 @@ import (
 )
 
 type DishUseCase struct {
-	DishRepo interfaceRepository.IDishRepo
+	DishRepo     interfaceRepository.IDishRepo
+	CategoryRepo interfaceRepository.ICategoryRepository
 }
 
-func NewDishUseCase(dishRepo interfaceRepository.IDishRepo) interfaceUseCase.IDishUseCase {
-	return &DishUseCase{DishRepo: dishRepo}
+func NewDishUseCase(dishRepo interfaceRepository.IDishRepo, categoryRepo interfaceRepository.ICategoryRepository) interfaceUseCase.IDishUseCase {
+	return &DishUseCase{DishRepo: dishRepo, CategoryRepo: categoryRepo}
 }
 
 func (r *DishUseCase) NewDish(dishData *requestmodels.DishReq) (*responsemodels.DishRes, error) {
@@ -43,8 +45,8 @@ func (r *DishUseCase) NewDish(dishData *requestmodels.DishReq) (*responsemodels.
 					resDishData.Description = "should be a valid Description. "
 				case "CuisineType":
 					resDishData.CuisineType = "should be a valid CuisineType "
-				case "Price":
-					resDishData.Price = 000000.00000000
+				case "MRP":
+					resDishData.MRP = 000000.00000000
 				case "PortionSize":
 					resDishData.PortionSize = "should have two or more digit"
 				case "DietaryInformation":
@@ -65,12 +67,6 @@ func (r *DishUseCase) NewDish(dishData *requestmodels.DishReq) (*responsemodels.
 					resDishData.RecommendedPairings = "should only have a maximum of 30 words"
 				case "SpecialFeatures":
 					resDishData.SpecialFeatures = "should only have a maximum of 10 words"
-				case "ImageURL1":
-					resDishData.ImageURL1 = "required"
-				case "ImageURL2":
-					resDishData.ImageURL2 = "required"
-				case "ImageURL3":
-					resDishData.ImageURL3 = "required"
 				case "PreparationTime":
 					resDishData.PreparationTime = "should only have a maximum of 15 words"
 				case "PromotionDiscount":
@@ -83,6 +79,11 @@ func (r *DishUseCase) NewDish(dishData *requestmodels.DishReq) (*responsemodels.
 			fmt.Println(err)
 			return &resDishData, err
 		}
+	}
+	myString := strconv.Itoa(int(dishData.CategoryId))
+	categoryStat := r.CategoryRepo.CheckCategoryExistsById(&myString)
+	if categoryStat != nil {
+		return &resDishData, categoryStat
 	}
 
 	numFiles := len(dishData.Image)
@@ -140,7 +141,7 @@ func (r *DishUseCase) NewDish(dishData *requestmodels.DishReq) (*responsemodels.
 	}
 
 	for i, image := range dishData.Image {
-		imageURL, err := aws.AWSImageUploader(image, sess, &BucketFolder)
+		imageURL, err := aws.AWSS3ImageUploader(image, sess, &BucketFolder)
 		if err != nil {
 			fmt.Printf("Error uploading image %d: %v\n", i+1, err)
 			return &resDishData, err
@@ -151,6 +152,7 @@ func (r *DishUseCase) NewDish(dishData *requestmodels.DishReq) (*responsemodels.
 	dishData.ImageURL1 = imageURLs[0]
 	dishData.ImageURL2 = imageURLs[1]
 	dishData.ImageURL3 = imageURLs[2]
+	dishData.Price = dishData.MRP - (dishData.MRP * float64(dishData.PromotionDiscount) / 100)
 
 	insertErr := r.DishRepo.AddNewDish(dishData)
 	if insertErr != nil {
@@ -165,6 +167,9 @@ func (r *DishUseCase) FetchAllDishesForRestaurant(restaurantId *int) (*[]respons
 	resDishMap, err := r.DishRepo.FetchAllDishesForARestaurant(restaurantId)
 	if err != nil {
 		return resDishMap, err
+	}
+	for i, dish := range *resDishMap {
+		(*resDishMap)[i].SalePrice = math.Ceil(dish.Price - (dish.Price * float64(dish.DiscountPercentage) / 100))
 	}
 	return resDishMap, nil
 }
@@ -194,8 +199,8 @@ func (r *DishUseCase) UpdateDishDetails(dishData *requestmodels.DishUpdateReq, i
 					resDishData.Description = "should be a valid Description. "
 				case "CuisineType":
 					resDishData.CuisineType = "should be a valid CuisineType "
-				case "Price":
-					resDishData.Price = 000000.00000000
+				case "MRP":
+					resDishData.MRP = 000000.00000000
 				case "PortionSize":
 					resDishData.PortionSize = "should have two or more digit"
 				case "DietaryInformation":
@@ -218,8 +223,6 @@ func (r *DishUseCase) UpdateDishDetails(dishData *requestmodels.DishUpdateReq, i
 					resDishData.SpecialFeatures = "should only have a maximum of 10 words"
 				case "PreparationTime":
 					resDishData.PreparationTime = "should only have a maximum of 15 words"
-				case "PromotionDiscount":
-					resDishData.PromotionDiscount = "should only have a maximum of 15 words"
 				case "StoryOrigin":
 					resDishData.StoryOrigin = "should only have a maximum of 100 words"
 				case "Availability":
@@ -233,6 +236,13 @@ func (r *DishUseCase) UpdateDishDetails(dishData *requestmodels.DishUpdateReq, i
 			return &resDishData, err
 		}
 	}
+	myString := strconv.Itoa(int(dishData.CategoryId))
+	categoryStat := r.CategoryRepo.CheckCategoryExistsById(&myString)
+	if categoryStat != nil {
+		return &resDishData, categoryStat
+	}
+
+	dishData.Price = dishData.MRP - (dishData.MRP * float64(dishData.PromotionDiscount) / 100)
 	insertErr := r.DishRepo.UpdateDish(dishData, id)
 	if insertErr != nil {
 		fmt.Println(insertErr)
@@ -255,12 +265,15 @@ func (r *DishUseCase) GetAllDishesForUser() (*[]responsemodels.DishRes, error) {
 	if err != nil {
 		return resDishMap, err
 	}
+	for i, dish := range *resDishMap {
+		(*resDishMap)[i].SalePrice = math.Ceil(dish.Price - (dish.Price * float64(dish.DiscountPercentage) / 100))
+	}
 	return resDishMap, nil
 }
 
 func (r *DishUseCase) FetchDishesByCategoryId(id *string) (*[]responsemodels.DishRes, error) {
 	var resDishMap *[]responsemodels.DishRes
-	
+
 	idInt, _ := strconv.Atoi(*id)
 	if idInt == 0 {
 		return resDishMap, errors.New("category with id=0 does not exist")
