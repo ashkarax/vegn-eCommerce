@@ -70,11 +70,7 @@ func (d *AddressRepo) GetUserAddresses(userId *string) (*[]responsemodels.Addres
 		fmt.Println(result)
 		return &resAddrMap, result.Error
 	}
-	if result.RowsAffected == 0 {
-		errMessage := fmt.Sprintf("No Address on this user-Id,Rows affected:%d", result.RowsAffected)
-		return &resAddrMap, errors.New(errMessage)
-
-	}
+	
 	return &resAddrMap, nil
 
 }

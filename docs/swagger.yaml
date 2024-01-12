@@ -1,0 +1,1529 @@
+definitions:
+  requestmodels.AddressReq:
+    properties:
+      addressId:
+        type: string
+      alternate_phone:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      line1:
+        type: string
+      phone:
+        type: string
+      postal_code:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+      userID:
+        type: string
+    required:
+    - alternate_phone
+    - city
+    - country
+    - line1
+    - phone
+    - postal_code
+    - state
+    - street
+    type: object
+  requestmodels.AdminLoginData:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 4
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  requestmodels.CategoryOfferReq:
+    properties:
+      category_discount:
+        maximum: 99
+        minimum: 1
+        type: integer
+      category_id:
+        type: string
+      endDate:
+        type: string
+      restaurantID:
+        type: string
+      title:
+        maxLength: 100
+        type: string
+      validityindays:
+        minimum: 0
+        type: integer
+    required:
+    - category_discount
+    - category_id
+    - title
+    - validityindays
+    type: object
+  requestmodels.CategoryOfferStatus:
+    properties:
+      id:
+        type: string
+      status:
+        maxLength: 20
+        type: string
+    required:
+    - id
+    - status
+    type: object
+  requestmodels.CategoryReq:
+    properties:
+      category_name:
+        type: string
+      categoryId:
+        type: string
+    required:
+    - category_name
+    type: object
+  requestmodels.ChangeStatus:
+    properties:
+      ordered_items_id:
+        type: string
+      restaurantId:
+        type: string
+      status:
+        maxLength: 20
+        type: string
+    required:
+    - ordered_items_id
+    - status
+    type: object
+  requestmodels.DishUpdateReq:
+    properties:
+      allergen_information:
+        maxLength: 50
+        type: string
+      availability:
+        type: boolean
+      calories:
+        type: integer
+      carbohydrates:
+        type: integer
+      category_id:
+        type: integer
+      cuisine_type:
+        minLength: 2
+        type: string
+      description:
+        minLength: 5
+        type: string
+      dietary_information:
+        type: string
+      fat:
+        type: integer
+      mrp:
+        type: number
+      name:
+        minLength: 2
+        type: string
+      portion_size:
+        type: string
+      preparation_time:
+        maxLength: 15
+        type: string
+      price:
+        type: number
+      promotion_discount:
+        type: integer
+      protein:
+        type: integer
+      quantity:
+        type: integer
+      recommended_pairings:
+        maxLength: 50
+        type: string
+      restaurantId:
+        type: string
+      special_features:
+        maxLength: 50
+        type: string
+      spice_level:
+        maxLength: 20
+        type: string
+      story_origin:
+        maxLength: 300
+        type: string
+    required:
+    - availability
+    - category_id
+    - cuisine_type
+    - description
+    - mrp
+    - name
+    - quantity
+    - restaurantId
+    type: object
+  requestmodels.EditCategoryOffer:
+    properties:
+      category_discount:
+        maximum: 99
+        minimum: 1
+        type: integer
+      categoryOfferID:
+        type: string
+      endDate:
+        type: string
+      restaurantID:
+        type: string
+      title:
+        type: string
+      validityindays:
+        type: integer
+    required:
+    - category_discount
+    - title
+    type: object
+  requestmodels.OrderDetails:
+    properties:
+      Payment_method:
+        maxLength: 20
+        type: string
+      address_id:
+        maxLength: 5
+        minLength: 1
+        type: string
+      coupon_code:
+        maxLength: 20
+        type: string
+      couponId:
+        type: integer
+      orderIdRazorPay:
+        type: string
+      orderStatus:
+        type: string
+      paymentStatus:
+        type: string
+      totalAmount:
+        type: number
+      userID:
+        type: string
+    required:
+    - Payment_method
+    - address_id
+    - userID
+    type: object
+  requestmodels.OtpVerification:
+    properties:
+      otp:
+        type: string
+    required:
+    - otp
+    type: object
+  requestmodels.RazorWebOut:
+    properties:
+      orderId:
+        type: string
+      razorpay_order_id:
+        type: string
+      razorpay_payment_id:
+        type: string
+      razorpay_signature:
+        type: string
+      rsecrect:
+        type: string
+      userId:
+        type: string
+    type: object
+  requestmodels.RestaurantLoginReq:
+    properties:
+      password:
+        minLength: 4
+        type: string
+      phone:
+        type: string
+    required:
+    - password
+    - phone
+    type: object
+  requestmodels.RestaurantSignUpReq:
+    properties:
+      confirmPassword:
+        type: string
+      description:
+        minLength: 10
+        type: string
+      district:
+        minLength: 2
+        type: string
+      email:
+        type: string
+      gst_no:
+        minLength: 2
+        type: string
+      locality:
+        minLength: 2
+        type: string
+      owner_name:
+        minLength: 2
+        type: string
+      password:
+        minLength: 4
+        type: string
+      phone:
+        type: string
+      pinCode:
+        type: string
+      restaurant_name:
+        minLength: 2
+        type: string
+    required:
+    - confirmPassword
+    - description
+    - district
+    - email
+    - gst_no
+    - locality
+    - owner_name
+    - password
+    - phone
+    - pinCode
+    - restaurant_name
+    type: object
+  requestmodels.SalesReportYYMMDD:
+    properties:
+      day:
+        maxLength: 2
+        type: string
+      month:
+        maxLength: 2
+        type: string
+      year:
+        maxLength: 4
+        type: string
+    required:
+    - year
+    type: object
+  requestmodels.UserLoginReq:
+    properties:
+      password:
+        minLength: 4
+        type: string
+      phone:
+        minLength: 10
+        type: string
+    required:
+    - password
+    - phone
+    type: object
+  requestmodels.UserSignUpReq:
+    properties:
+      confirmPassword:
+        type: string
+      email:
+        type: string
+      firstName:
+        minLength: 3
+        type: string
+      lastName:
+        minLength: 1
+        type: string
+      password:
+        minLength: 3
+        type: string
+      phone:
+        type: string
+    required:
+    - confirmPassword
+    - email
+    - firstName
+    - lastName
+    - password
+    - phone
+    type: object
+  responsemodels.CategoryRes:
+    properties:
+      category_id:
+        type: string
+      category_name:
+        type: string
+      category_status:
+        type: string
+    type: object
+  responsemodels.Response:
+    properties:
+      after exicution: {}
+      error: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: Online Veg Food Delivery.
+  title: Go + Gin Veg*n.
+  version: "1.0"
+paths:
+  /address:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all addresses for the current user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: GetAllAddress
+      tags:
+      - Address
+    post:
+      consumes:
+      - application/json
+      description: Adds a new address for the current user.
+      parameters:
+      - description: New address data.
+        in: body
+        name: newAddressData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.AddressReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: AddNewAddress
+      tags:
+      - Address
+  /address/{addressId}:
+    patch:
+      consumes:
+      - application/json
+      description: Edits an existing address for the current user.
+      parameters:
+      - description: The ID of the address to edit.
+        in: path
+        name: addressId
+        required: true
+        type: string
+      - description: Address edit data.
+        in: body
+        name: editAddressData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.AddressReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: EditAddress
+      tags:
+      - Address
+  /admin/category:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all available categories.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responsemodels.CategoryRes'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - AdminRefTokenAuth: []
+      summary: FetchAllCategory
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Creates a new category.
+      parameters:
+      - description: New category data.
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.CategoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.CategoryRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - AdminRefTokenAuth: []
+      summary: NewCategory
+      tags:
+      - Category
+  /admin/category/{categoryid}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a category.
+      parameters:
+      - description: The ID of the category to delete.
+        in: path
+        name: categoryid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - AdminRefTokenAuth: []
+      summary: DeleteCategory
+      tags:
+      - Category
+    patch:
+      consumes:
+      - application/json
+      description: Updates an existing category.
+      parameters:
+      - description: The ID of the category to update.
+        in: path
+        name: categoryid
+        required: true
+        type: string
+      - description: Updated category data.
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.CategoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.CategoryRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - AdminRefTokenAuth: []
+      summary: UpdateCategory
+      tags:
+      - Category
+  /admin/login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in an admin user.
+      parameters:
+      - description: Admin login credentials.
+        in: body
+        name: loginCredential
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.AdminLoginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: AdminLogin
+      tags:
+      - Admin
+  /admin/restaurants/pending:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of restaurants with a pending status.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - AdminRefTokenAuth: []
+      summary: PendingRestuarants
+      tags:
+      - Restaurants
+  /admin/restaurants/pending/verify/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Verifies a restaurant by setting its status to "verified".
+      parameters:
+      - description: The ID of the restaurant to verify.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - AdminRefTokenAuth: []
+      summary: VerifyRestaurant
+      tags:
+      - Restaurants
+  /cart:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the cart details for the current user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: GetCartDetailsOfUser
+      tags:
+      - Cart
+  /cart/{dishid}:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a dish from the user's cart.
+      parameters:
+      - description: The ID of the dish to remove.
+        in: path
+        name: dishid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: DecrementorRemoveFromCart
+      tags:
+      - Cart
+  /cart/addtocart/{dishid}:
+    post:
+      consumes:
+      - application/json
+      description: Adds a dish to the user's cart.
+      parameters:
+      - description: The ID of the dish to add.
+        in: path
+        name: dishid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: AddToCart
+      tags:
+      - Cart
+  /dishes:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all dishes.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: GetAllDishesForUser
+      tags:
+      - Dish
+  /dishes/{categoryid}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves dishes for a specific category.
+      parameters:
+      - description: The ID of the category to fetch dishes for.
+        in: path
+        name: categoryid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: FetchDishesByCategoryId
+      tags:
+      - Dish
+  /dishes/{dishid}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details for a specific dish.
+      parameters:
+      - description: The ID of the dish to fetch.
+        in: path
+        name: dishid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: FetchDishWithId
+      tags:
+      - Dish
+  /login/:
+    post:
+      consumes:
+      - application/json
+      description: User can login using this handler.
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.UserLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: UserLogin
+      tags:
+      - User
+  /order:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all orders for the current user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: GetAllOrders
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      description: Places a new order for the current user.
+      parameters:
+      - description: Order details.
+        in: body
+        name: orderDetails
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.OrderDetails'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: PlaceNewOrder
+      tags:
+      - Orders
+  /order/invoice/{orderid}:
+    get:
+      consumes:
+      - application/json
+      description: Generates an invoice for a specific order.
+      parameters:
+      - description: The ID of the order to generate an invoice for.
+        in: path
+        name: orderid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: GenerateInvoice
+      tags:
+      - Orders
+  /payments/verify/{orderid}:
+    post:
+      consumes:
+      - application/json
+      description: Verifies an online payment for a specific order.
+      parameters:
+      - description: The ID of the order to verify payment for.
+        in: path
+        name: orderid
+        required: true
+        type: string
+      - description: Razorpay payment response details.
+        in: body
+        name: razorResp
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.RazorWebOut'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: VerifyPayment
+      tags:
+      - Payments
+  /profile:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the profile information for a specific user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: GetUserProfile
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: Edits a user's profile.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - UserAuthTokenAuth: []
+      - UserRefTokenAuth: []
+      summary: EditUserProfile
+      tags:
+      - User
+  /restaurant/category:
+    get:
+      consumes:
+      - application/json
+      description: Fetch all active categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Fetch active categories
+      tags:
+      - RestaurantCategoryManagement
+  /restaurant/category/offer:
+    get:
+      consumes:
+      - application/json
+      description: Fetch all category offers for the restaurant specified in the request
+        context
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Fetch all category offers
+      tags:
+      - RestaurantCategoryOfferManagement
+    post:
+      consumes:
+      - application/json
+      description: Create a new category offer for the restaurant specified in the
+        request context
+      parameters:
+      - description: Category offer information
+        in: body
+        name: categoryOfferData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.CategoryOfferReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Create a new category offer
+      tags:
+      - RestaurantCategoryOfferManagement
+  /restaurant/category/offer/:
+    patch:
+      consumes:
+      - application/json
+      description: Change the status of a category offer for the restaurant specified
+        in the request context
+      parameters:
+      - description: Category offer status information
+        in: body
+        name: categoryOfferStatusData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.CategoryOfferStatus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Change the status of a category offer
+      tags:
+      - RestaurantCategoryOfferManagement
+  /restaurant/category/offer/{categoryofferid}:
+    patch:
+      consumes:
+      - application/json
+      description: Edit a category offer for the restaurant specified in the request
+        context
+      parameters:
+      - description: Category Offer ID to edit.
+        in: path
+        name: categoryofferid
+        required: true
+        type: string
+      - description: Updated category offer information
+        in: body
+        name: categoryOfferData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.EditCategoryOffer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Edit a category offer
+      tags:
+      - RestaurantCategoryOfferManagement
+  /restaurant/dish:
+    get:
+      consumes:
+      - application/json
+      description: Fetch all dishes for the restaurant specified in the request context
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Fetch all dishes for a restaurant
+      tags:
+      - RestauratDishManagement
+    post:
+      consumes:
+      - application/json
+      description: Add a new dish for the restaurant specified in the request context
+      parameters:
+      - description: Name of the dish
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Category ID of the dish
+        in: formData
+        name: category_id
+        required: true
+        type: integer
+      - description: Description of the dish
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Cuisine type of the dish
+        in: formData
+        name: cuisine_type
+        required: true
+        type: string
+      - description: MRP (Maximum Retail Price) of the dish
+        in: formData
+        name: mrp
+        required: true
+        type: number
+      - description: Portion size of the dish
+        in: formData
+        name: portion_size
+        type: string
+      - description: Dietary information of the dish
+        in: formData
+        name: dietary_information
+        type: string
+      - description: Calories in the dish
+        in: formData
+        name: calories
+        type: integer
+      - description: Protein content in the dish
+        in: formData
+        name: protein
+        type: integer
+      - description: Carbohydrates content in the dish
+        in: formData
+        name: carbohydrates
+        type: integer
+      - description: Fat content in the dish
+        in: formData
+        name: fat
+        type: integer
+      - description: Spice level of the dish
+        in: formData
+        name: spice_level
+        type: string
+      - description: Allergen information of the dish
+        in: formData
+        name: allergen_information
+        type: string
+      - description: Recommended pairings for the dish
+        in: formData
+        name: recommended_pairings
+        type: string
+      - description: Special features of the dish
+        in: formData
+        name: special_features
+        type: string
+      - description: Image file of the dish
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Preparation time for the dish
+        in: formData
+        name: preparation_time
+        type: string
+      - description: Promotion discount for the dish
+        in: formData
+        name: promotion_discount
+        type: integer
+      - description: Story origin of the dish
+        in: formData
+        name: story_origin
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Add a new dish
+      tags:
+      - RestauratDishManagement
+  /restaurant/dish/{dishid}:
+    patch:
+      consumes:
+      - application/json
+      description: Update details for the dish specified by dishid
+      parameters:
+      - description: ID of the dish to update.
+        in: path
+        name: dishid
+        required: true
+        type: integer
+      - description: Updated dish information
+        in: body
+        name: dishData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.DishUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: Update details for a dish
+      tags:
+      - RestauratDishManagement
+  /restaurant/login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a restaurant.
+      parameters:
+      - description: Restaurant login credentials.
+        in: body
+        name: RestaurantLoginData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.RestaurantLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: RestaurantLogin
+      tags:
+      - Restaurant
+  /restaurant/orders:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all orders for a specific restaurant.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: FetchAllOrdersForRestaurant
+      tags:
+      - RestaurantOrderManagement
+  /restaurant/orders/status:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the status of an order.
+      parameters:
+      - description: Details of the status change.
+        in: body
+        name: changeStat
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.ChangeStatus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: ChangeStatus
+      tags:
+      - RestaurantOrderManagement
+  /restaurant/salesreport:
+    post:
+      consumes:
+      - application/json
+      description: Generates a sales report for a specific date range or a specific
+        month or a specific year.
+      parameters:
+      - description: YYMMDD for the report .
+        in: body
+        name: yymmdd
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.SalesReportYYMMDD'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: GetSalesreporYYMMDD
+      tags:
+      - RestaurantReports
+  /restaurant/salesreport/{customdays}:
+    get:
+      consumes:
+      - application/json
+      description: Generates a sales report for a custom number of days.
+      parameters:
+      - description: Number of recent days for the report.
+        in: path
+        name: customdays
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: GetSalesreporCustomDays
+      tags:
+      - RestaurantReports
+  /restaurant/salesreport/xlsx:
+    get:
+      consumes:
+      - application/json
+      description: Generates a sales report in XLSX format.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - RestaurantAuthTokenAuth: []
+      - RestaurantRefTokenAuth: []
+      summary: GenerateSalesReportXlsx
+      tags:
+      - RestaurantReports
+  /restaurant/signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new restaurant account.
+      parameters:
+      - description: Restaurant signup data.
+        in: body
+        name: restaurantSignUpData
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.RestaurantSignUpReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: RestaurantSignUp
+      tags:
+      - Restaurant
+  /signup/:
+    post:
+      consumes:
+      - application/json
+      description: User can signup using this handler
+      parameters:
+      - description: User Sign-Up Details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.UserSignUpReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      summary: UserSignUp
+      tags:
+      - User
+  /verify/:
+    post:
+      consumes:
+      - application/json
+      description: User can verify the OTP which is generated after successful signup
+        request.
+      parameters:
+      - description: OTP generated
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requestmodels.OtpVerification'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsemodels.Response'
+      security:
+      - OtpTempTokenAuth: []
+      summary: UserOTPVerication
+      tags:
+      - User
+securityDefinitions:
+  AdminRefTokenAuth:
+    in: header
+    name: refreshtoken
+    type: apiKey
+  OtpTempTokenAuth:
+    in: header
+    name: Authorizations
+    type: apiKey
+  RestaurantAuthTokenAuth:
+    in: header
+    name: accesstoken
+    type: apiKey
+  RestaurantRefTokenAuth:
+    in: header
+    name: refreshtoken
+    type: apiKey
+  UserAuthTokenAuth:
+    in: header
+    name: accesstoken
+    type: apiKey
+  UserRefTokenAuth:
+    in: header
+    name: refreshtoken
+    type: apiKey
+swagger: "2.0"

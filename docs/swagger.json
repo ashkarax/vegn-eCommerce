@@ -1,0 +1,2371 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Online Veg Food Delivery.",
+        "title": "Go + Gin Veg*n.",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/address": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves all addresses for the current user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Address"
+                ],
+                "summary": "GetAllAddress",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Adds a new address for the current user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Address"
+                ],
+                "summary": "AddNewAddress",
+                "parameters": [
+                    {
+                        "description": "New address data.",
+                        "name": "newAddressData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.AddressReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/address/{addressId}": {
+            "patch": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Edits an existing address for the current user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Address"
+                ],
+                "summary": "EditAddress",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the address to edit.",
+                        "name": "addressId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Address edit data.",
+                        "name": "editAddressData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.AddressReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/category": {
+            "get": {
+                "security": [
+                    {
+                        "AdminRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves all available categories.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "FetchAllCategory",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responsemodels.CategoryRes"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminRefTokenAuth": []
+                    }
+                ],
+                "description": "Creates a new category.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "NewCategory",
+                "parameters": [
+                    {
+                        "description": "New category data.",
+                        "name": "category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.CategoryReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.CategoryRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/category/{categoryid}": {
+            "delete": {
+                "security": [
+                    {
+                        "AdminRefTokenAuth": []
+                    }
+                ],
+                "description": "Deletes a category.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "DeleteCategory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the category to delete.",
+                        "name": "categoryid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "AdminRefTokenAuth": []
+                    }
+                ],
+                "description": "Updates an existing category.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "UpdateCategory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the category to update.",
+                        "name": "categoryid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated category data.",
+                        "name": "category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.CategoryReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.CategoryRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/login": {
+            "post": {
+                "description": "Logs in an admin user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "AdminLogin",
+                "parameters": [
+                    {
+                        "description": "Admin login credentials.",
+                        "name": "loginCredential",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.AdminLoginData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/restaurants/pending": {
+            "get": {
+                "security": [
+                    {
+                        "AdminRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of restaurants with a pending status.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurants"
+                ],
+                "summary": "PendingRestuarants",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/restaurants/pending/verify/{id}": {
+            "patch": {
+                "security": [
+                    {
+                        "AdminRefTokenAuth": []
+                    }
+                ],
+                "description": "Verifies a restaurant by setting its status to \"verified\".",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurants"
+                ],
+                "summary": "VerifyRestaurant",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the restaurant to verify.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves the cart details for the current user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "GetCartDetailsOfUser",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/addtocart/{dishid}": {
+            "post": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Adds a dish to the user's cart.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "AddToCart",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the dish to add.",
+                        "name": "dishid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/{dishid}": {
+            "delete": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Removes a dish from the user's cart.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "DecrementorRemoveFromCart",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the dish to remove.",
+                        "name": "dishid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/dishes": {
+            "get": {
+                "description": "Retrieves all dishes.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dish"
+                ],
+                "summary": "GetAllDishesForUser",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/dishes/{categoryid}": {
+            "get": {
+                "description": "Retrieves dishes for a specific category.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dish"
+                ],
+                "summary": "FetchDishesByCategoryId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the category to fetch dishes for.",
+                        "name": "categoryid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/dishes/{dishid}": {
+            "get": {
+                "description": "Retrieves details for a specific dish.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dish"
+                ],
+                "summary": "FetchDishWithId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "The ID of the dish to fetch.",
+                        "name": "dishid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/": {
+            "post": {
+                "description": "User can login using this handler.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserLogin",
+                "parameters": [
+                    {
+                        "description": "Login Credentials",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.UserLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/order": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves all orders for the current user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "GetAllOrders",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Places a new order for the current user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "PlaceNewOrder",
+                "parameters": [
+                    {
+                        "description": "Order details.",
+                        "name": "orderDetails",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.OrderDetails"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/order/invoice/{orderid}": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Generates an invoice for a specific order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "GenerateInvoice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the order to generate an invoice for.",
+                        "name": "orderid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/payments/verify/{orderid}": {
+            "post": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Verifies an online payment for a specific order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "VerifyPayment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the order to verify payment for.",
+                        "name": "orderid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Razorpay payment response details.",
+                        "name": "razorResp",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.RazorWebOut"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/profile": {
+            "get": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves the profile information for a specific user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetUserProfile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "UserAuthTokenAuth": []
+                    },
+                    {
+                        "UserRefTokenAuth": []
+                    }
+                ],
+                "description": "Edits a user's profile.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "EditUserProfile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/category": {
+            "get": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Fetch all active categories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantCategoryManagement"
+                ],
+                "summary": "Fetch active categories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/category/offer": {
+            "get": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Fetch all category offers for the restaurant specified in the request context",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantCategoryOfferManagement"
+                ],
+                "summary": "Fetch all category offers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Create a new category offer for the restaurant specified in the request context",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantCategoryOfferManagement"
+                ],
+                "summary": "Create a new category offer",
+                "parameters": [
+                    {
+                        "description": "Category offer information",
+                        "name": "categoryOfferData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.CategoryOfferReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/category/offer/": {
+            "patch": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Change the status of a category offer for the restaurant specified in the request context",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantCategoryOfferManagement"
+                ],
+                "summary": "Change the status of a category offer",
+                "parameters": [
+                    {
+                        "description": "Category offer status information",
+                        "name": "categoryOfferStatusData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.CategoryOfferStatus"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/category/offer/{categoryofferid}": {
+            "patch": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Edit a category offer for the restaurant specified in the request context",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantCategoryOfferManagement"
+                ],
+                "summary": "Edit a category offer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category Offer ID to edit.",
+                        "name": "categoryofferid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated category offer information",
+                        "name": "categoryOfferData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.EditCategoryOffer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/dish": {
+            "get": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Fetch all dishes for the restaurant specified in the request context",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestauratDishManagement"
+                ],
+                "summary": "Fetch all dishes for a restaurant",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Add a new dish for the restaurant specified in the request context",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestauratDishManagement"
+                ],
+                "summary": "Add a new dish",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of the dish",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category ID of the dish",
+                        "name": "category_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description of the dish",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cuisine type of the dish",
+                        "name": "cuisine_type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "MRP (Maximum Retail Price) of the dish",
+                        "name": "mrp",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Portion size of the dish",
+                        "name": "portion_size",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Dietary information of the dish",
+                        "name": "dietary_information",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Calories in the dish",
+                        "name": "calories",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Protein content in the dish",
+                        "name": "protein",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Carbohydrates content in the dish",
+                        "name": "carbohydrates",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Fat content in the dish",
+                        "name": "fat",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Spice level of the dish",
+                        "name": "spice_level",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Allergen information of the dish",
+                        "name": "allergen_information",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Recommended pairings for the dish",
+                        "name": "recommended_pairings",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Special features of the dish",
+                        "name": "special_features",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image file of the dish",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Preparation time for the dish",
+                        "name": "preparation_time",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Promotion discount for the dish",
+                        "name": "promotion_discount",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Story origin of the dish",
+                        "name": "story_origin",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/dish/{dishid}": {
+            "patch": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Update details for the dish specified by dishid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestauratDishManagement"
+                ],
+                "summary": "Update details for a dish",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the dish to update.",
+                        "name": "dishid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated dish information",
+                        "name": "dishData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.DishUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/login": {
+            "post": {
+                "description": "Logs in a restaurant.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "RestaurantLogin",
+                "parameters": [
+                    {
+                        "description": "Restaurant login credentials.",
+                        "name": "RestaurantLoginData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.RestaurantLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/orders": {
+            "get": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Retrieves all orders for a specific restaurant.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantOrderManagement"
+                ],
+                "summary": "FetchAllOrdersForRestaurant",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/orders/status": {
+            "patch": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Updates the status of an order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantOrderManagement"
+                ],
+                "summary": "ChangeStatus",
+                "parameters": [
+                    {
+                        "description": "Details of the status change.",
+                        "name": "changeStat",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.ChangeStatus"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/salesreport": {
+            "post": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Generates a sales report for a specific date range or a specific month or a specific year.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantReports"
+                ],
+                "summary": "GetSalesreporYYMMDD",
+                "parameters": [
+                    {
+                        "description": "YYMMDD for the report .",
+                        "name": "yymmdd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.SalesReportYYMMDD"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/salesreport/xlsx": {
+            "get": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Generates a sales report in XLSX format.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantReports"
+                ],
+                "summary": "GenerateSalesReportXlsx",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/salesreport/{customdays}": {
+            "get": {
+                "security": [
+                    {
+                        "RestaurantAuthTokenAuth": []
+                    },
+                    {
+                        "RestaurantRefTokenAuth": []
+                    }
+                ],
+                "description": "Generates a sales report for a custom number of days.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RestaurantReports"
+                ],
+                "summary": "GetSalesreporCustomDays",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of recent days for the report.",
+                        "name": "customdays",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant/signup": {
+            "post": {
+                "description": "Creates a new restaurant account.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "RestaurantSignUp",
+                "parameters": [
+                    {
+                        "description": "Restaurant signup data.",
+                        "name": "restaurantSignUpData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.RestaurantSignUpReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup/": {
+            "post": {
+                "description": "User can signup using this handler",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserSignUp",
+                "parameters": [
+                    {
+                        "description": "User Sign-Up Details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.UserSignUpReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/verify/": {
+            "post": {
+                "security": [
+                    {
+                        "OtpTempTokenAuth": []
+                    }
+                ],
+                "description": "User can verify the OTP which is generated after successful signup request.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserOTPVerication",
+                "parameters": [
+                    {
+                        "description": "OTP generated",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestmodels.OtpVerification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responsemodels.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "requestmodels.AddressReq": {
+            "type": "object",
+            "required": [
+                "alternate_phone",
+                "city",
+                "country",
+                "line1",
+                "phone",
+                "postal_code",
+                "state",
+                "street"
+            ],
+            "properties": {
+                "addressId": {
+                    "type": "string"
+                },
+                "alternate_phone": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "line1": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestmodels.AdminLoginData": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 4
+                }
+            }
+        },
+        "requestmodels.CategoryOfferReq": {
+            "type": "object",
+            "required": [
+                "category_discount",
+                "category_id",
+                "title",
+                "validityindays"
+            ],
+            "properties": {
+                "category_discount": {
+                    "type": "integer",
+                    "maximum": 99,
+                    "minimum": 1
+                },
+                "category_id": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "restaurantID": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "validityindays": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        },
+        "requestmodels.CategoryOfferStatus": {
+            "type": "object",
+            "required": [
+                "id",
+                "status"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "maxLength": 20
+                }
+            }
+        },
+        "requestmodels.CategoryReq": {
+            "type": "object",
+            "required": [
+                "category_name"
+            ],
+            "properties": {
+                "categoryId": {
+                    "type": "string"
+                },
+                "category_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestmodels.ChangeStatus": {
+            "type": "object",
+            "required": [
+                "ordered_items_id",
+                "status"
+            ],
+            "properties": {
+                "ordered_items_id": {
+                    "type": "string"
+                },
+                "restaurantId": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "maxLength": 20
+                }
+            }
+        },
+        "requestmodels.DishUpdateReq": {
+            "type": "object",
+            "required": [
+                "availability",
+                "category_id",
+                "cuisine_type",
+                "description",
+                "mrp",
+                "name",
+                "quantity",
+                "restaurantId"
+            ],
+            "properties": {
+                "allergen_information": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "availability": {
+                    "type": "boolean"
+                },
+                "calories": {
+                    "type": "integer"
+                },
+                "carbohydrates": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "cuisine_type": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 5
+                },
+                "dietary_information": {
+                    "type": "string"
+                },
+                "fat": {
+                    "type": "integer"
+                },
+                "mrp": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "portion_size": {
+                    "type": "string"
+                },
+                "preparation_time": {
+                    "type": "string",
+                    "maxLength": 15
+                },
+                "price": {
+                    "type": "number"
+                },
+                "promotion_discount": {
+                    "type": "integer"
+                },
+                "protein": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "recommended_pairings": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "restaurantId": {
+                    "type": "string"
+                },
+                "special_features": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "spice_level": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "story_origin": {
+                    "type": "string",
+                    "maxLength": 300
+                }
+            }
+        },
+        "requestmodels.EditCategoryOffer": {
+            "type": "object",
+            "required": [
+                "category_discount",
+                "title"
+            ],
+            "properties": {
+                "categoryOfferID": {
+                    "type": "string"
+                },
+                "category_discount": {
+                    "type": "integer",
+                    "maximum": 99,
+                    "minimum": 1
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "restaurantID": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "validityindays": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestmodels.OrderDetails": {
+            "type": "object",
+            "required": [
+                "Payment_method",
+                "address_id",
+                "userID"
+            ],
+            "properties": {
+                "Payment_method": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "address_id": {
+                    "type": "string",
+                    "maxLength": 5,
+                    "minLength": 1
+                },
+                "couponId": {
+                    "type": "integer"
+                },
+                "coupon_code": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "orderIdRazorPay": {
+                    "type": "string"
+                },
+                "orderStatus": {
+                    "type": "string"
+                },
+                "paymentStatus": {
+                    "type": "string"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestmodels.OtpVerification": {
+            "type": "object",
+            "required": [
+                "otp"
+            ],
+            "properties": {
+                "otp": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestmodels.RazorWebOut": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "string"
+                },
+                "razorpay_order_id": {
+                    "type": "string"
+                },
+                "razorpay_payment_id": {
+                    "type": "string"
+                },
+                "razorpay_signature": {
+                    "type": "string"
+                },
+                "rsecrect": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestmodels.RestaurantLoginReq": {
+            "type": "object",
+            "required": [
+                "password",
+                "phone"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 4
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestmodels.RestaurantSignUpReq": {
+            "type": "object",
+            "required": [
+                "confirmPassword",
+                "description",
+                "district",
+                "email",
+                "gst_no",
+                "locality",
+                "owner_name",
+                "password",
+                "phone",
+                "pinCode",
+                "restaurant_name"
+            ],
+            "properties": {
+                "confirmPassword": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "district": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gst_no": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "locality": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "owner_name": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 4
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "pinCode": {
+                    "type": "string"
+                },
+                "restaurant_name": {
+                    "type": "string",
+                    "minLength": 2
+                }
+            }
+        },
+        "requestmodels.SalesReportYYMMDD": {
+            "type": "object",
+            "required": [
+                "year"
+            ],
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 2
+                },
+                "month": {
+                    "type": "string",
+                    "maxLength": 2
+                },
+                "year": {
+                    "type": "string",
+                    "maxLength": 4
+                }
+            }
+        },
+        "requestmodels.UserLoginReq": {
+            "type": "object",
+            "required": [
+                "password",
+                "phone"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 4
+                },
+                "phone": {
+                    "type": "string",
+                    "minLength": 10
+                }
+            }
+        },
+        "requestmodels.UserSignUpReq": {
+            "type": "object",
+            "required": [
+                "confirmPassword",
+                "email",
+                "firstName",
+                "lastName",
+                "password",
+                "phone"
+            ],
+            "properties": {
+                "confirmPassword": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "lastName": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "responsemodels.CategoryRes": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "category_name": {
+                    "type": "string"
+                },
+                "category_status": {
+                    "type": "string"
+                }
+            }
+        },
+        "responsemodels.Response": {
+            "type": "object",
+            "properties": {
+                "after exicution": {},
+                "error": {},
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "AdminRefTokenAuth": {
+            "type": "apiKey",
+            "name": "refreshtoken",
+            "in": "header"
+        },
+        "OtpTempTokenAuth": {
+            "type": "apiKey",
+            "name": "Authorizations",
+            "in": "header"
+        },
+        "RestaurantAuthTokenAuth": {
+            "type": "apiKey",
+            "name": "accesstoken",
+            "in": "header"
+        },
+        "RestaurantRefTokenAuth": {
+            "type": "apiKey",
+            "name": "refreshtoken",
+            "in": "header"
+        },
+        "UserAuthTokenAuth": {
+            "type": "apiKey",
+            "name": "accesstoken",
+            "in": "header"
+        },
+        "UserRefTokenAuth": {
+            "type": "apiKey",
+            "name": "refreshtoken",
+            "in": "header"
+        }
+    }
+}

@@ -37,6 +37,18 @@ func (u *PaymentHandler) OnlinePayment(c *gin.Context) {
 
 }
 
+// @Summary VerifyPayment
+// @Description Verifies an online payment for a specific order.
+// @Tags Payments
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Param orderid path string true "The ID of the order to verify payment for."
+// @Param razorResp body requestmodels.RazorWebOut true "Razorpay payment response details."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /payments/verify/{orderid} [post]
 func (u *PaymentHandler) VerifyPayment(c *gin.Context) {
 	orderId := c.Param("orderid")
 	userId, _ := c.Get("userId")
@@ -44,14 +56,16 @@ func (u *PaymentHandler) VerifyPayment(c *gin.Context) {
 
 	var razorResp requestmodels.RazorWebOut
 
-	razorResp.OrderId = orderId
-	razorResp.UserId = userIdString
+	
 
 	if err := c.BindJSON(&razorResp); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	razorResp.OrderId = orderId
+	razorResp.UserId = userIdString
+	
 	order, err := u.PaymentUseCase.OnlinePaymentVerification(&razorResp)
 	if err != nil {
 		finalReslt := responsemodels.Responses(http.StatusBadRequest, "", nil, err.Error())

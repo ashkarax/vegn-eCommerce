@@ -17,6 +17,15 @@ func NewRestaurantHandler(RestaurantUsecase interfaceUseCase.IrestaurantUseCase)
 	return &RestaurantHandler{RestaurantUsecase: RestaurantUsecase}
 }
 
+// @Summary RestaurantSignUp
+// @Description Creates a new restaurant account.
+// @Tags Restaurant
+// @Accept json
+// @Produce json
+// @Param restaurantSignUpData body requestmodels.RestaurantSignUpReq true "Restaurant signup data."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/signup [post]
 func (u *RestaurantHandler) RestaurantSignUp(c *gin.Context) {
 	var restaurantSignUpData requestmodels.RestaurantSignUpReq
 	
@@ -34,6 +43,15 @@ func (u *RestaurantHandler) RestaurantSignUp(c *gin.Context) {
 	c.JSON(http.StatusOK, finalReslt)
 }
 
+// @Summary RestaurantLogin
+// @Description Logs in a restaurant.
+// @Tags Restaurant
+// @Accept json
+// @Produce json
+// @Param RestaurantLoginData body requestmodels.RestaurantLoginReq true "Restaurant login credentials."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/login [post]
 func (u *RestaurantHandler) RestaurantLogin(c *gin.Context) {
 	var RestaurantLoginData requestmodels.RestaurantLoginReq
 

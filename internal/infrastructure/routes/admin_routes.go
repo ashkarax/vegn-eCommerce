@@ -3,13 +3,11 @@ package routes
 import (
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/handlers"
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/middlewares"
-
-	// "github.com/ashkarax/vegn-eCommerce/internal/infrastructure/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
 func AdminRoutes(engin *gin.RouterGroup, admin *handlers.AdminHandler, coupon *handlers.CouponHandler, category *handlers.CategoryHandler, JWTmiddleware *middlewares.TokenRequirements) {
-	engin.POST("/login", admin.AdminLogin)
+	engin.POST("/login", admin.AdminLogin)     //swagprogress
 
 	engin.Use(JWTmiddleware.AdminAuthorization)
 	{
@@ -20,8 +18,8 @@ func AdminRoutes(engin *gin.RouterGroup, admin *handlers.AdminHandler, coupon *h
 			restaurantmanagement.GET("/", admin.VerifiedRestuarants)
 			restaurantmanagement.PATCH("/block/:id", admin.BlockRestaurant)
 
-			restaurantmanagement.GET("/pending", admin.PendingRestuarants)
-			restaurantmanagement.PATCH("/pending/verify/:id", admin.VerifyRestaurant)
+			restaurantmanagement.GET("/pending", admin.PendingRestuarants)                      //swagprogress
+			restaurantmanagement.PATCH("/pending/verify/:id", admin.VerifyRestaurant)            //swagprogress
 			restaurantmanagement.PATCH("/pending/reject/:id", admin.RejectRestaurant)
 
 			restaurantmanagement.GET("/blocked", admin.BlockedRestuarants)
@@ -54,10 +52,10 @@ func AdminRoutes(engin *gin.RouterGroup, admin *handlers.AdminHandler, coupon *h
 		}
 		categorymanagement := engin.Group("/category")
 		{
-			categorymanagement.POST("/", category.NewCategory)
-			categorymanagement.GET("/", category.FetchAllCategory)
-			categorymanagement.PATCH("/:categoryid", category.UpdateCategory)
-			categorymanagement.DELETE("/:categoryid", category.DeleteCategory)
+			categorymanagement.POST("/", category.NewCategory)                         //swagprogress
+			categorymanagement.GET("/", category.FetchAllCategory)                     //swagprogress
+			categorymanagement.PATCH("/:categoryid", category.UpdateCategory)         //swagprogress
+			categorymanagement.DELETE("/:categoryid", category.DeleteCategory)         //swagprogress
 
 		}
 

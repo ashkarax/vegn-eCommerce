@@ -16,6 +16,17 @@ func NewCartHandler(useCase interfaceUseCase.ICartUseCase) *CartHandler {
 	return &CartHandler{UseCase: useCase}
 }
 
+// @Summary AddToCart
+// @Description Adds a dish to the user's cart.
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Param dishid path string true "The ID of the dish to add."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /cart/addtocart/{dishid} [post]
 func (u *CartHandler) AddToCart(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdString, _ := userId.(string)
@@ -33,6 +44,16 @@ func (u *CartHandler) AddToCart(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @Summary GetCartDetailsOfUser
+// @Description Retrieves the cart details for the current user.
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /cart [get]
 func (u *CartHandler) GetCartDetailsOfUser(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdString, _ := userId.(string)
@@ -50,6 +71,17 @@ func (u *CartHandler) GetCartDetailsOfUser(c *gin.Context) {
 
 }
 
+// @Summary DecrementorRemoveFromCart
+// @Description Removes a dish from the user's cart.
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Param dishid path string true "The ID of the dish to remove."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /cart/{dishid} [delete]
 func (u *CartHandler) DecrementorRemoveFromCart(c *gin.Context) {
 	dishid := c.Param("dishid")
 	userId, _ := c.Get("userId")

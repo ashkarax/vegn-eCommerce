@@ -1,8 +1,8 @@
 package requestmodels
 
 type AddressReq struct {
-	UserID    string `validate:"required"` //to be fetched from the access token
-	AddressId string `validate:"required"` //to be fetched as param
+	UserID    string 
+	AddressId string 
 
 	Line1          string `json:"line1" validate:"required"`
 	Street         string `json:"street" validate:"required"`

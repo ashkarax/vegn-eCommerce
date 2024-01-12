@@ -55,9 +55,6 @@ func (d *CartRepo) FetchCartItemsofUser(userID *string) (*[]responsemodels.CartI
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	if result.RowsAffected == 0 {
-		return nil, errors.New("user have no cart,cart empty")
-	}
 	return &cartItemsInfoSlice, nil
 
 }

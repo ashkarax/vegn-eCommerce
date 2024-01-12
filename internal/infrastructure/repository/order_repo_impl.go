@@ -59,9 +59,6 @@ func (d *OrderRepo) GetAllOrdersByUser(userId *string) (*[]responsemodels.OrderD
 	var orderSlice []responsemodels.OrderDetailsResponse
 	query := "SELECT orders.order_id,ordered_items.dish_id,ordered_items.restaurant_id,ordered_items.ordered_items_id,orders.address_id,orders.payment_method,orders.order_date,ordered_items.order_status,ordered_items.order_quantity,ordered_items.dish_price,restaurants.restaurant_name,dishes.name,dishes.image_url1,addresses.line1,addresses.postal_code,addresses.phone FROM ordered_items JOIN orders ON ordered_items.order_id = orders.order_id JOIN restaurants ON ordered_items.restaurant_id = restaurants.id JOIN dishes ON ordered_items.dish_id = dishes.id JOIN addresses ON orders.address_id = addresses.id WHERE orders.user_id = ?"
 	result := d.DB.Raw(query, userId).Scan(&orderSlice)
-	if result.RowsAffected == 0 {
-		return &orderSlice, errors.New("no past orders by this user")
-	}
 	if result.Error != nil {
 		return &orderSlice, result.Error
 	}

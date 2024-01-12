@@ -21,6 +21,17 @@ func NewOrderHandler(orderUseCase interfaceUseCase.IOrderUseCase) *OrderHandler 
 	return &OrderHandler{OrderUseCase: orderUseCase}
 }
 
+// @Summary PlaceNewOrder
+// @Description Places a new order for the current user.
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Param orderDetails body requestmodels.OrderDetails true "Order details."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /order [post]
 func (u *OrderHandler) PlaceNewOrder(c *gin.Context) {
 	var orderDetails requestmodels.OrderDetails
 
@@ -43,6 +54,17 @@ func (u *OrderHandler) PlaceNewOrder(c *gin.Context) {
 	response := responsemodels.Responses(http.StatusOK, "order placed succesfully", resp, nil)
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary GetAllOrders
+// @Description Retrieves all orders for the current user.
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /order [get]
 func (u *OrderHandler) GetAllOrders(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdString, _ := userId.(string)
@@ -58,6 +80,16 @@ func (u *OrderHandler) GetAllOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @Summary FetchAllOrdersForRestaurant
+// @Description Retrieves all orders for a specific restaurant.
+// @Tags RestaurantOrderManagement
+// @Accept json
+// @Produce json
+// @Security RestaurantAuthTokenAuth
+// @Security RestaurantRefTokenAuth
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/orders [get]
 func (u *OrderHandler) FetchAllOrdersForRestaurant(c *gin.Context) {
 	restaurantId, _ := c.Get("RestaurantId")
 	restaurantIdString, _ := restaurantId.(string)
@@ -134,6 +166,17 @@ func (u *OrderHandler) ReturnOrder(c *gin.Context) {
 
 }
 
+// @Summary ChangeStatus
+// @Description Updates the status of an order.
+// @Tags RestaurantOrderManagement
+// @Accept json
+// @Produce json
+// @Security RestaurantAuthTokenAuth
+// @Security RestaurantRefTokenAuth
+// @Param changeStat body requestmodels.ChangeStatus true "Details of the status change."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/orders/status [patch]
 func (u *OrderHandler) ChangeStatus(c *gin.Context) {
 	var changeStat requestmodels.ChangeStatus
 
@@ -196,6 +239,17 @@ func (u *OrderHandler) ChangeStatus(c *gin.Context) {
 
 }
 
+// @Summary GenerateInvoice
+// @Description Generates an invoice for a specific order.
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Security UserAuthTokenAuth
+// @Security UserRefTokenAuth
+// @Param orderid path string true "The ID of the order to generate an invoice for."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /order/invoice/{orderid} [get]
 func (u *OrderHandler) GenerateInvoice(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdString, _ := userId.(string)
@@ -214,6 +268,17 @@ func (u *OrderHandler) GenerateInvoice(c *gin.Context) {
 
 }
 
+
+// @Summary GenerateSalesReportXlsx
+// @Description Generates a sales report in XLSX format.
+// @Tags RestaurantReports
+// @Accept json
+// @Produce json
+// @Security RestaurantAuthTokenAuth
+// @Security RestaurantRefTokenAuth
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/salesreport/xlsx [get]
 func (u *OrderHandler) GenerateSalesReportXlsx(c *gin.Context) {
 	restaurantId, _ := c.Get("RestaurantId")
 	restaurantIdtring, _ := restaurantId.(string)
@@ -230,6 +295,17 @@ func (u *OrderHandler) GenerateSalesReportXlsx(c *gin.Context) {
 
 }
 
+// @Summary GetSalesreporCustomDays
+// @Description Generates a sales report for a custom number of days.
+// @Tags RestaurantReports
+// @Accept json
+// @Produce json
+// @Security RestaurantAuthTokenAuth
+// @Security RestaurantRefTokenAuth
+// @Param customdays path int true "Number of recent days for the report."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/salesreport/{customdays} [get]
 func (u *OrderHandler) GetSalesreporCustomDays(c *gin.Context) {
 	restaurantId, _ := c.Get("RestaurantId")
 	restaurantIdtring, _ := restaurantId.(string)
@@ -255,6 +331,17 @@ func (u *OrderHandler) GetSalesreporCustomDays(c *gin.Context) {
 
 }
 
+// @Summary GetSalesreporYYMMDD
+// @Description Generates a sales report for a specific date range or a specific month or a specific year.
+// @Tags RestaurantReports
+// @Accept json
+// @Produce json
+// @Security RestaurantAuthTokenAuth
+// @Security RestaurantRefTokenAuth
+// @Param yymmdd body requestmodels.SalesReportYYMMDD true "YYMMDD for the report ."
+// @Success 200  {object} responsemodels.Response
+// @Failure 400  {object} responsemodels.Response
+// @Router /restaurant/salesreport [post]
 func (u *OrderHandler) GetSalesreporYYMMDD(c *gin.Context) {
 	var yymmdd requestmodels.SalesReportYYMMDD
 	restaurantId, _ := c.Get("RestaurantId")

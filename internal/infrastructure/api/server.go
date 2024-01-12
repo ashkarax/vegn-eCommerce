@@ -8,6 +8,9 @@ import (
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/middlewares"
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/routes"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "github.com/ashkarax/vegn-eCommerce/docs"
 )
 
 type ServerHttp struct {
@@ -31,9 +34,13 @@ func NewServerHttp(adminHandler *handlers.AdminHandler,
 	// load htmlpages
 	engin.LoadHTMLGlob("./templates/*.html")
 
-	routes.AdminRoutes(engin.Group("/admin"), adminHandler, couponHandler,categoryHandler,JWTmiddleware)
-	routes.UserRoutes(engin.Group(""), userHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler, categoryHandler,JWTmiddleware)
-	routes.RestaurantRoutes(engin.Group("/restaurant"), restaurantHandler, dishHandler, orderHandler,categoryHandler, JWTmiddleware)
+	
+	// use ginSwagger middleware to serve the API docs
+	engin.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	routes.AdminRoutes(engin.Group("/admin"), adminHandler, couponHandler, categoryHandler, JWTmiddleware)
+	routes.UserRoutes(engin.Group(""), userHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler, categoryHandler, JWTmiddleware)
+	routes.RestaurantRoutes(engin.Group("/restaurant"), restaurantHandler, dishHandler, orderHandler, categoryHandler, JWTmiddleware)
 
 	return &ServerHttp{engin: engin}
 
