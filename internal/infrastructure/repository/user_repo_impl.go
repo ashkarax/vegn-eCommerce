@@ -23,7 +23,7 @@ func (d *userRepository) IsUserExist(phone string) bool {
 	delUncompletedUser := "DELETE FROM users WHERE phone =$1 AND status =$2"
 	result := d.DB.Exec(delUncompletedUser, phone, "pending")
 	if result.Error != nil {
-		fmt.Println("No users wit this phno as pending")
+		fmt.Println("Error in deleting already existing user with this phonenumber with status pending")
 	}
 
 	query := "SELECT COUNT(*) FROM users WHERE phone=$1 AND status!=$2"
@@ -142,11 +142,10 @@ func (d *userRepository) GetUserByStatus(status string) (*[]responsemodels.UserD
 func (d *userRepository) GetUserProfile(id *string) (*responsemodels.UserDetails, error) {
 	var userData responsemodels.UserDetails
 
-	r := d.DB.Raw("SELECT * FROM users WHERE id = ?", id).Scan(&userData)
+	r := d.DB.Raw("SELECT id,f_name,l_name,email,phone,status FROM users WHERE id = ?", id).Scan(&userData)
 
 	if r.RowsAffected == 0 {
-		errMessage := fmt.Sprintf("No results found,Rows affected:%d", r.RowsAffected)
-		return &userData, errors.New(errMessage)
+		return &userData, errors.New("no results found,Rows affected 0")
 	}
 	if r.Error != nil {
 		return &userData, r.Error
@@ -155,9 +154,9 @@ func (d *userRepository) GetUserProfile(id *string) (*responsemodels.UserDetails
 	return &userData, nil
 }
 
-func (d *userRepository) EditUserDetails(editData *requestmodels.UserEditProf) error{
+func (d *userRepository) EditUserDetails(editData *requestmodels.UserEditProf) error {
 
-	query:="UPDATE users SET f_name = ?, l_name = ?, email = ? WHERE id = ?"
+	query := "UPDATE users SET f_name = ?, l_name = ?, email = ? WHERE id = ?"
 
 	result := d.DB.Exec(query,
 		editData.FName,
@@ -169,12 +168,11 @@ func (d *userRepository) EditUserDetails(editData *requestmodels.UserEditProf) e
 		fmt.Println(result)
 		return result.Error
 	}
-	
+
 	return nil
 }
 
-
-func (d *userRepository) AddMoneyToWallet(userId *string,refundAmount*float64) error{
+func (d *userRepository) AddMoneyToWallet(userId *string, refundAmount *float64) error {
 	query := "UPDATE users SET wallet = wallet + ? WHERE id = ?"
 	err := d.DB.Exec(query, refundAmount, userId).Error
 	if err != nil {
