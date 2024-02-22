@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	requestmodels "github.com/ashkarax/vegn-eCommerce/internal/models/request_models"
 	responsemodels "github.com/ashkarax/vegn-eCommerce/internal/models/response_models"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
@@ -56,23 +57,25 @@ func TestGetUserProfile(t *testing.T) {
 		},
 	}
 
-	for _, index := range tests {
-		db, mock, _ := sqlmock.New()
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			db, mock, _ := sqlmock.New()
 
-		defer db.Close()
+			defer db.Close()
 
-		DB, _ := gorm.Open(postgres.New(postgres.Config{
-			Conn: db,
-		}), &gorm.Config{})
+			DB, _ := gorm.Open(postgres.New(postgres.Config{
+				Conn: db,
+			}), &gorm.Config{})
 
-		index.stub(mock)
+			tc.stub(mock)
 
-		userRepository := NewUserRepository(DB)
-		result, err := userRepository.GetUserProfile(&index.args)
+			userRepository := NewUserRepository(DB)
+			result, err := userRepository.GetUserProfile(&tc.args)
 
-		assert.Equal(t, index.want, result)
-		assert.Equal(t, index.wantErr, err)
+			assert.Equal(t, tc.want, result)
+			assert.Equal(t, tc.wantErr, err)
 
+		})
 	}
 }
 
@@ -114,22 +117,136 @@ func TestIsUserExist(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		db, mock, err := sqlmock.New()
-		if err != nil {
-			t.Fatalf("Error creating mock DB: %v", err)
-		}
-		defer db.Close()
+		t.Run(tc.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New()
+			if err != nil {
+				t.Fatalf("Error creating mock DB: %v", err)
+			}
+			defer db.Close()
 
-		DB, _ := gorm.Open(postgres.New(postgres.Config{
-			Conn: db,
-		}), &gorm.Config{})
+			DB, _ := gorm.Open(postgres.New(postgres.Config{
+				Conn: db,
+			}), &gorm.Config{})
 
-		tc.stub(mock)
+			tc.stub(mock)
 
-		userRepository := NewUserRepository(DB)
-		result := userRepository.IsUserExist(tc.args)
+			userRepository := NewUserRepository(DB)
+			result := userRepository.IsUserExist(tc.args)
 
-		assert.Equal(t, tc.want, result, "Test case %q failed: expected %t, got %t", tc.name, tc.want, result)
+			assert.Equal(t, tc.want, result, "Test case %q failed: expected %t, got %t", tc.name, tc.want, result)
 
+		})
+	}
+}
+
+func TestCreateUser(t *testing.T) {
+	tests := []struct {
+		name string
+		args *requestmodels.UserSignUpReq
+		stub func(sqlmock.Sqlmock)
+	}{
+		{
+			name: "succesful user signup",
+			args: &requestmodels.UserSignUpReq{
+				FirstName: "Ashkar",
+				LastName:  "A.S",
+				Email:     "ashkar@example.com",
+				Phone:     "+910000000000",
+				Password:  "Encryptedpassword",
+			},
+			stub: func(mocksql sqlmock.Sqlmock) {
+				mocksql.ExpectExec(regexp.QuoteMeta("INSERT INTO users (f_name,l_name, email, phone, password) VALUES($1, $2, $3, $4,$5)")).
+					WithArgs("Ashkar", "A.S", "ashkar@example.com", "+910000000000", "Encryptedpassword").
+					WillReturnResult(sqlmock.NewResult(0, 1))
+
+			},
+		},
+		{
+			name: "unsuccesful user signup",
+			args: &requestmodels.UserSignUpReq{
+				FirstName: "Ashkar",
+				LastName:  "A.S",
+				Email:     "ashkar@example.com",
+				Phone:     "+910000000000",
+			},
+			stub: func(mocksql sqlmock.Sqlmock) {
+				mocksql.ExpectExec(regexp.QuoteMeta("INSERT INTO users (f_name,l_name, email, phone, password) VALUES($1, $2, $3, $4,$5)")).
+					WithArgs("Ashkar", "A.S", "ashkar@example.com", "+910000000000", "").
+					WillReturnError(errors.New("arguments do not match: expected 4, but got 5 arguments"))
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			db, mock, _ := sqlmock.New()
+			defer db.Close()
+
+			DB, _ := gorm.Open(postgres.New(postgres.Config{
+				Conn: db,
+			}), &gorm.Config{})
+
+			tc.stub(mock)
+
+			userRepository := NewUserRepository(DB)
+			userRepository.CreateUser(tc.args)
+		})
+	}
+}
+
+func TestChangeUserStatusActive(t *testing.T) {
+	tests := []struct {
+		name    string
+		args    string
+		stub    func(sqlmock.Sqlmock)
+		wantErr error
+	}{
+		{
+			name: "user exist",
+			args: "+918921791915",
+			stub: func(mocksql sqlmock.Sqlmock) {
+				mocksql.ExpectExec(regexp.QuoteMeta("UPDATE users SET status = 'active' WHERE phone = $1")).
+					WithArgs("+918921791915").
+					WillReturnResult(sqlmock.NewResult(0, 1))
+			},
+			wantErr: nil,
+		},
+		{
+			name: "user does not exist",
+			args: "+918921791915",
+			stub: func(mocksql sqlmock.Sqlmock) {
+				mocksql.ExpectExec(regexp.QuoteMeta("UPDATE users SET status = 'active' WHERE phone = $1")).
+					WithArgs("+918921791915").
+					WillReturnResult(sqlmock.NewResult(0, 0))
+			},
+			wantErr: nil,
+		},
+		{
+			name: "returning error",
+			args: "+918921791915",
+			stub: func(mocksql sqlmock.Sqlmock) {
+				mocksql.ExpectExec(regexp.QuoteMeta("UPDATE users SET status = 'active' WHERE phone = $1")).
+					WithArgs("+918921791915").
+					WillReturnError(errors.New("error"))
+			},
+			wantErr: errors.New("error"),
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			db, mock, _ := sqlmock.New()
+			defer db.Close()
+
+			DB, _ := gorm.Open(postgres.New(postgres.Config{
+				Conn: db,
+			}), &gorm.Config{})
+
+			tc.stub(mock)
+			userRepository := NewUserRepository(DB)
+			err := userRepository.ChangeUserStatusActive(tc.args)
+
+			assert.Equal(t, tc.wantErr, err)
+
+		})
 	}
 }
