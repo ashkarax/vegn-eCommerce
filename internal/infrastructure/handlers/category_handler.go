@@ -18,16 +18,16 @@ func NewCategoryHandler(useCase interfaceUseCase.ICategoryUseCase) *CategoryHand
 	return &CategoryHandler{UseCase: useCase}
 }
 
-// @Summary NewCategory
-// @Description Creates a new category.
-// @Tags Category
-// @Accept json
-// @Produce json
-// @Security AdminRefTokenAuth  
-// @Param category body requestmodels.CategoryReq true "New category data."
-// @Success 200  {object} responsemodels.CategoryRes
-// @Failure 400  {object} responsemodels.Response
-// @Router /admin/category [post]
+//	@Summary		NewCategory
+//	@Description	Creates a new category.
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Security		AdminRefTokenAuth  
+//	@Param			category	body		requestmodels.CategoryReq	true	"New category data."
+//	@Success		200			{object}	responsemodels.CategoryRes
+//	@Failure		400			{object}	responsemodels.Response
+//	@Router			/admin/category [post]
 func (u *CategoryHandler) NewCategory(c *gin.Context) {
 	var category requestmodels.CategoryReq
 	var categoryRes responsemodels.CategoryRes
@@ -49,15 +49,15 @@ func (u *CategoryHandler) NewCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary FetchAllCategory
-// @Description Retrieves all available categories.
-// @Tags Category
-// @Accept json
-// @Produce json
-// @Security AdminRefTokenAuth  
-// @Success 200  {array} responsemodels.CategoryRes
-// @Failure 400  {object} responsemodels.Response
-// @Router /admin/category [get]
+//	@Summary		FetchAllCategory
+//	@Description	Retrieves all available categories.
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Security		AdminRefTokenAuth  
+//	@Success		200	{array}		responsemodels.CategoryRes
+//	@Failure		400	{object}	responsemodels.Response
+//	@Router			/admin/category [get]
 func (u *CategoryHandler) FetchAllCategory(c *gin.Context) {
 	categorySlice, err := u.UseCase.GetAllCategories()
 	if err != nil {
@@ -70,16 +70,16 @@ func (u *CategoryHandler) FetchAllCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary DeleteCategory
-// @Description Deletes a category.
-// @Tags Category
-// @Accept json
-// @Produce json
-// @Security AdminRefTokenAuth
-// @Param categoryid path string true "The ID of the category to delete."
-// @Success 200  {object} responsemodels.Response
-// @Failure 400  {object} responsemodels.Response
-// @Router /admin/category/{categoryid} [delete]
+//	@Summary		DeleteCategory
+//	@Description	Deletes a category.
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Security		AdminRefTokenAuth
+//	@Param			categoryid	path		string	true	"The ID of the category to delete."
+//	@Success		200			{object}	responsemodels.Response
+//	@Failure		400			{object}	responsemodels.Response
+//	@Router			/admin/category/{categoryid} [delete]
 func (u *CategoryHandler) DeleteCategory(c *gin.Context) {
 	categoryid := c.Param("categoryid")
 	newStatus := "deleted"
@@ -93,17 +93,17 @@ func (u *CategoryHandler) DeleteCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary UpdateCategory
-// @Description Updates an existing category.
-// @Tags Category
-// @Accept json
-// @Produce json
-// @Security AdminRefTokenAuth
-// @Param categoryid path string true "The ID of the category to update."
-// @Param category body requestmodels.CategoryReq true "Updated category data."
-// @Success 200  {object} responsemodels.CategoryRes
-// @Failure 400  {object} responsemodels.Response
-// @Router /admin/category/{categoryid} [patch]
+//	@Summary		UpdateCategory
+//	@Description	Updates an existing category.
+//	@Tags			Category
+//	@Accept			json
+//	@Produce		json
+//	@Security		AdminRefTokenAuth
+//	@Param			categoryid	path		string						true	"The ID of the category to update."
+//	@Param			category	body		requestmodels.CategoryReq	true	"Updated category data."
+//	@Success		200			{object}	responsemodels.CategoryRes
+//	@Failure		400			{object}	responsemodels.Response
+//	@Router			/admin/category/{categoryid} [patch]
 func (u *CategoryHandler) UpdateCategory(c *gin.Context) {
 	categoryid := c.Param("categoryid")
 	var category requestmodels.CategoryReq
@@ -127,16 +127,16 @@ func (u *CategoryHandler) UpdateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary Fetch active categories
-// @Description Fetch all active categories
-// @Tags RestaurantCategoryManagement
-// @Accept json
-// @Produce json
-// @Security RestaurantAuthTokenAuth
-// @Security RestaurantRefTokenAuth
-// @Success 200 {object} responsemodels.Response
-// @Failure 400 {object} responsemodels.Response
-// @Router /restaurant/category [get]
+//	@Summary		Fetch active categories
+//	@Description	Fetch all active categories
+//	@Tags			RestaurantCategoryManagement
+//	@Accept			json
+//	@Produce		json
+//	@Security		RestaurantAuthTokenAuth
+//	@Security		RestaurantRefTokenAuth
+//	@Success		200	{object}	responsemodels.Response
+//	@Failure		400	{object}	responsemodels.Response
+//	@Router			/restaurant/category [get]
 func (u *CategoryHandler) FetchActiveCategories(c *gin.Context) {
 	categorySlice, err := u.UseCase.FetchActiveCategories()
 	if err != nil {
@@ -149,17 +149,17 @@ func (u *CategoryHandler) FetchActiveCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary Create a new category offer
-// @Description Create a new category offer for the restaurant specified in the request context
-// @Tags RestaurantCategoryOfferManagement
-// @Accept json
-// @Produce json
-// @Security RestaurantAuthTokenAuth
-// @Security RestaurantRefTokenAuth
-// @Param categoryOfferData body requestmodels.CategoryOfferReq true "Category offer information"
-// @Success 200 {object} responsemodels.Response
-// @Failure 400 {object} responsemodels.Response
-// @Router /restaurant/category/offer [post]
+//	@Summary		Create a new category offer
+//	@Description	Create a new category offer for the restaurant specified in the request context
+//	@Tags			RestaurantCategoryOfferManagement
+//	@Accept			json
+//	@Produce		json
+//	@Security		RestaurantAuthTokenAuth
+//	@Security		RestaurantRefTokenAuth
+//	@Param			categoryOfferData	body		requestmodels.CategoryOfferReq	true	"Category offer information"
+//	@Success		200					{object}	responsemodels.Response
+//	@Failure		400					{object}	responsemodels.Response
+//	@Router			/restaurant/category/offer [post]
 func (u *CategoryHandler) CreateCategoryOffer(c *gin.Context) {
 
 	var categoryOffer requestmodels.CategoryOfferReq
@@ -187,16 +187,16 @@ func (u *CategoryHandler) CreateCategoryOffer(c *gin.Context) {
 
 }
 
-// @Summary Fetch all category offers
-// @Description Fetch all category offers for the restaurant specified in the request context
-// @Tags RestaurantCategoryOfferManagement
-// @Accept json
-// @Produce json
-// @Security RestaurantAuthTokenAuth
-// @Security RestaurantRefTokenAuth
-// @Success 200 {object} responsemodels.Response
-// @Failure 400 {object} responsemodels.Response
-// @Router /restaurant/category/offer [get]
+//	@Summary		Fetch all category offers
+//	@Description	Fetch all category offers for the restaurant specified in the request context
+//	@Tags			RestaurantCategoryOfferManagement
+//	@Accept			json
+//	@Produce		json
+//	@Security		RestaurantAuthTokenAuth
+//	@Security		RestaurantRefTokenAuth
+//	@Success		200	{object}	responsemodels.Response
+//	@Failure		400	{object}	responsemodels.Response
+//	@Router			/restaurant/category/offer [get]
 func (u *CategoryHandler) GetAllCategoryOffer(c *gin.Context) {
 
 	restaurantId := c.MustGet("RestaurantId").(string)
@@ -213,18 +213,18 @@ func (u *CategoryHandler) GetAllCategoryOffer(c *gin.Context) {
 
 }
 
-// @Summary Edit a category offer
-// @Description Edit a category offer for the restaurant specified in the request context
-// @Tags RestaurantCategoryOfferManagement
-// @Accept json
-// @Produce json
-// @Security RestaurantAuthTokenAuth
-// @Security RestaurantRefTokenAuth
-// @Param categoryofferid path string true "Category Offer ID to edit."
-// @Param categoryOfferData body requestmodels.EditCategoryOffer true "Updated category offer information"
-// @Success 200 {object} responsemodels.Response
-// @Failure 400 {object} responsemodels.Response
-// @Router /restaurant/category/offer/{categoryofferid} [patch]
+//	@Summary		Edit a category offer
+//	@Description	Edit a category offer for the restaurant specified in the request context
+//	@Tags			RestaurantCategoryOfferManagement
+//	@Accept			json
+//	@Produce		json
+//	@Security		RestaurantAuthTokenAuth
+//	@Security		RestaurantRefTokenAuth
+//	@Param			categoryofferid		path		string							true	"Category Offer ID to edit."
+//	@Param			categoryOfferData	body		requestmodels.EditCategoryOffer	true	"Updated category offer information"
+//	@Success		200					{object}	responsemodels.Response
+//	@Failure		400					{object}	responsemodels.Response
+//	@Router			/restaurant/category/offer/{categoryofferid} [patch]
 func (u *CategoryHandler) EditCategoryOffer(c *gin.Context) {
 
 	var categoryOffer requestmodels.EditCategoryOffer
@@ -250,17 +250,17 @@ func (u *CategoryHandler) EditCategoryOffer(c *gin.Context) {
 
 }
 
-// @Summary Change the status of a category offer
-// @Description Change the status of a category offer for the restaurant specified in the request context
-// @Tags RestaurantCategoryOfferManagement
-// @Accept json
-// @Produce json
-// @Security RestaurantAuthTokenAuth
-// @Security RestaurantRefTokenAuth
-// @Param categoryOfferStatusData body requestmodels.CategoryOfferStatus true "Category offer status information"
-// @Success 200 {object} responsemodels.Response
-// @Failure 400 {object} responsemodels.Response
-// @Router /restaurant/category/offer/ [patch]
+//	@Summary		Change the status of a category offer
+//	@Description	Change the status of a category offer for the restaurant specified in the request context
+//	@Tags			RestaurantCategoryOfferManagement
+//	@Accept			json
+//	@Produce		json
+//	@Security		RestaurantAuthTokenAuth
+//	@Security		RestaurantRefTokenAuth
+//	@Param			categoryOfferStatusData	body		requestmodels.CategoryOfferStatus	true	"Category offer status information"
+//	@Success		200						{object}	responsemodels.Response
+//	@Failure		400						{object}	responsemodels.Response
+//	@Router			/restaurant/category/offer/ [patch]
 func (u *CategoryHandler) ChangeCategoryOfferStatus(c *gin.Context) {
 	var status requestmodels.CategoryOfferStatus
 	if err := c.BindJSON(&status); err != nil {

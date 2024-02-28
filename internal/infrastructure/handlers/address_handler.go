@@ -18,17 +18,17 @@ func NewAddressHandler(addressUseCase interfaceUseCase.IAddressUseCase) *Address
 }
 
 
-// @Summary AddNewAddress
-// @Description Adds a new address for the current user.
-// @Tags Address
-// @Accept json
-// @Produce json
-// @Security UserAuthTokenAuth
-// @Security UserRefTokenAuth
-// @Param newAddressData body requestmodels.AddressReq true "New address data."
-// @Success 200  {object} responsemodels.Response
-// @Failure 400  {object} responsemodels.Response
-// @Router /address [post]
+//	@Summary		AddNewAddress
+//	@Description	Adds a new address for the current user.
+//	@Tags			Address
+//	@Accept			json
+//	@Produce		json
+//	@Security		UserAuthTokenAuth
+//	@Security		UserRefTokenAuth
+//	@Param			newAddressData	body		requestmodels.AddressReq	true	"New address data."
+//	@Success		200				{object}	responsemodels.Response
+//	@Failure		400				{object}	responsemodels.Response
+//	@Router			/address [post]
 func (u *AddressHandler) AddNewAddress(c *gin.Context) {
 	var newAddressData requestmodels.AddressReq
 
@@ -53,18 +53,18 @@ func (u *AddressHandler) AddNewAddress(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary EditAddress
-// @Description Edits an existing address for the current user.
-// @Tags Address
-// @Accept json
-// @Produce json
-// @Security UserAuthTokenAuth
-// @Security UserRefTokenAuth
-// @Param addressId path string true "The ID of the address to edit."
-// @Param editAddressData body requestmodels.AddressReq true "Address edit data."
-// @Success 200  {object} responsemodels.Response
-// @Failure 400  {object} responsemodels.Response
-// @Router /address/{addressId} [patch]
+//	@Summary		EditAddress
+//	@Description	Edits an existing address for the current user.
+//	@Tags			Address
+//	@Accept			json
+//	@Produce		json
+//	@Security		UserAuthTokenAuth
+//	@Security		UserRefTokenAuth
+//	@Param			addressId		path		string						true	"The ID of the address to edit."
+//	@Param			editAddressData	body		requestmodels.AddressReq	true	"Address edit data."
+//	@Success		200				{object}	responsemodels.Response
+//	@Failure		400				{object}	responsemodels.Response
+//	@Router			/address/{addressId} [patch]
 func (u *AddressHandler) EditAddress(c *gin.Context) {
 	var editAddressData requestmodels.AddressReq
 
@@ -92,16 +92,16 @@ func (u *AddressHandler) EditAddress(c *gin.Context) {
 
 }
 
-// @Summary GetAllAddress
-// @Description Retrieves all addresses for the current user.
-// @Tags Address
-// @Accept json
-// @Produce json
-// @Security UserAuthTokenAuth
-// @Security UserRefTokenAuth
-// @Success 200  {object} responsemodels.Response
-// @Failure 400  {object} responsemodels.Response
-// @Router /address [get]
+//	@Summary		GetAllAddress
+//	@Description	Retrieves all addresses for the current user.
+//	@Tags			Address
+//	@Accept			json
+//	@Produce		json
+//	@Security		UserAuthTokenAuth
+//	@Security		UserRefTokenAuth
+//	@Success		200	{object}	responsemodels.Response
+//	@Failure		400	{object}	responsemodels.Response
+//	@Router			/address [get]
 func (u *AddressHandler) GetAllAddress(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	userIdString, _ := userId.(string)

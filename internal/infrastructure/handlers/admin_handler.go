@@ -25,15 +25,15 @@ func NewAdminHandler(useCase interfaceUseCase.IAdminUseCase,
 		UserUsecase:       user}
 }
 
-// @Summary AdminLogin
-// @Description Logs in an admin user.
-// @Tags Admin
-// @Accept json
-// @Produce json
-// @Param loginCredential body requestmodels.AdminLoginData true "Admin login credentials."
-// @Success 200  {object} responsemodels.Response
-// @Failure 401  {object} responsemodels.Response
-// @Router /admin/login [post]
+//	@Summary		AdminLogin
+//	@Description	Logs in an admin user.
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			loginCredential	body		requestmodels.AdminLoginData	true	"Admin login credentials."
+//	@Success		200				{object}	responsemodels.Response
+//	@Failure		401				{object}	responsemodels.Response
+//	@Router			/admin/login [post]
 func (u *AdminHandler) AdminLogin(c *gin.Context) {
 	var loginCredential requestmodels.AdminLoginData
 
@@ -72,15 +72,15 @@ func (u *AdminHandler) VerifiedRestuarants(c *gin.Context) {
 }
 
 
-// @Summary PendingRestuarants
-// @Description Retrieves a list of restaurants with a pending status.
-// @Tags Restaurants
-// @Accept json
-// @Produce json
-// @Security AdminRefTokenAuth
-// @Success 200 {object} responsemodels.Response
-// @Failure 400  {object} responsemodels.Response
-// @Router /admin/restaurants/pending [get]
+//	@Summary		PendingRestuarants
+//	@Description	Retrieves a list of restaurants with a pending status.
+//	@Tags			Restaurants
+//	@Accept			json
+//	@Produce		json
+//	@Security		AdminRefTokenAuth
+//	@Success		200	{object}	responsemodels.Response
+//	@Failure		400	{object}	responsemodels.Response
+//	@Router			/admin/restaurants/pending [get]
 func (u *AdminHandler) PendingRestuarants(c *gin.Context) {
 
 	result, err := u.RestaurantUseCase.RestaurantsByStatus("pending")
@@ -134,16 +134,16 @@ func (u *AdminHandler) BlockRestaurant(c *gin.Context) {
 
 }
 
-// @Summary VerifyRestaurant
-// @Description Verifies a restaurant by setting its status to "verified".
-// @Tags Restaurants
-// @Accept json
-// @Produce json
-// @Security AdminRefTokenAuth
-// @Param id path string true "The ID of the restaurant to verify."
-// @Success 200  {object} responsemodels.Response
-// @Failure 400  {object} responsemodels.Response
-// @Router /admin/restaurants/pending/verify/{id} [patch]
+//	@Summary		VerifyRestaurant
+//	@Description	Verifies a restaurant by setting its status to "verified".
+//	@Tags			Restaurants
+//	@Accept			json
+//	@Produce		json
+//	@Security		AdminRefTokenAuth
+//	@Param			id	path		string	true	"The ID of the restaurant to verify."
+//	@Success		200	{object}	responsemodels.Response
+//	@Failure		400	{object}	responsemodels.Response
+//	@Router			/admin/restaurants/pending/verify/{id} [patch]
 func (u *AdminHandler) VerifyRestaurant(c *gin.Context) {
 	restaurantID := c.Param("id")
 	num, _ := strconv.Atoi(restaurantID)
