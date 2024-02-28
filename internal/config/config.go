@@ -4,6 +4,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+type PortManager struct {
+	RunnerPort string `mapstructure:"PORTNO"`
+}
+
 type DataBase struct {
 	DBUser     string `mapstructure:"DBUSER"`
 	DBName     string `mapstructure:"DBNAME"`
@@ -37,11 +41,12 @@ type RazorPay struct {
 }
 
 type Config struct {
-	DB     DataBase
-	Token  Token
-	Otp    OTP
-	AwsS3  AWS
-	RazorP RazorPay
+	DB       DataBase
+	Token    Token
+	Otp      OTP
+	AwsS3    AWS
+	RazorP   RazorPay
+	PortMngr PortManager
 }
 
 func LoadConfig() (*Config, error) {
@@ -51,6 +56,7 @@ func LoadConfig() (*Config, error) {
 	var otp OTP
 	var awsS3 AWS
 	var razorP RazorPay
+	var portmngr PortManager
 
 	viper.AddConfigPath("./")
 	viper.SetConfigFile(".env")
@@ -81,7 +87,11 @@ func LoadConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = viper.Unmarshal(&portmngr)
+	if err != nil {
+		return nil, err
+	}
 
-	config := Config{DB: db, Token: token, Otp: otp, AwsS3: awsS3, RazorP: razorP}
+	config := Config{DB: db, Token: token, Otp: otp, AwsS3: awsS3, RazorP: razorP, PortMngr: portmngr}
 	return &config, nil
 }

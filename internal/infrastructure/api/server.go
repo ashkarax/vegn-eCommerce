@@ -4,17 +4,19 @@ import (
 	"fmt"
 	"log"
 
+	_ "github.com/ashkarax/vegn-eCommerce/docs"
+	"github.com/ashkarax/vegn-eCommerce/internal/config"
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/handlers"
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/middlewares"
 	"github.com/ashkarax/vegn-eCommerce/internal/infrastructure/routes"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "github.com/ashkarax/vegn-eCommerce/docs"
 )
 
 type ServerHttp struct {
-	engin *gin.Engine
+	engin  *gin.Engine
+	config *config.PortManager
 }
 
 func NewServerHttp(adminHandler *handlers.AdminHandler,
@@ -27,14 +29,14 @@ func NewServerHttp(adminHandler *handlers.AdminHandler,
 	paymentHandler *handlers.PaymentHandler,
 	couponHandler *handlers.CouponHandler,
 	categoryHandler *handlers.CategoryHandler,
-	JWTmiddleware *middlewares.TokenRequirements) *ServerHttp {
+	JWTmiddleware *middlewares.TokenRequirements,
+	config *config.PortManager) *ServerHttp {
 
 	engin := gin.Default()
 
 	// load htmlpages
 	engin.LoadHTMLGlob("./templates/*.html")
 
-	
 	// use ginSwagger middleware to serve the API docs
 	engin.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -42,14 +44,15 @@ func NewServerHttp(adminHandler *handlers.AdminHandler,
 	routes.UserRoutes(engin.Group(""), userHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler, categoryHandler, JWTmiddleware)
 	routes.RestaurantRoutes(engin.Group("/restaurant"), restaurantHandler, dishHandler, orderHandler, categoryHandler, JWTmiddleware)
 
-	return &ServerHttp{engin: engin}
+	return &ServerHttp{engin: engin, config: config}
 
 }
 
 func (server *ServerHttp) Start() {
-	err := server.engin.Run(":8080")
+	port_with_colon := ":" + server.config.RunnerPort
+	err := server.engin.Run(port_with_colon)
 	if err != nil {
 		log.Fatal("gin engin couldn't start")
 	}
-	fmt.Println("gin engin start")
+	fmt.Printf("\ngin engin start:%s", server.config.RunnerPort)
 }

@@ -68,7 +68,7 @@ func InitializeAPI(config config.Config) (*server.ServerHttp, error) {
 	paymentUseCase := usecase.NewPaymentUsecase(orderRepository, cartRepository, &config.RazorP)
 	paymentHandler := handlers.NewPaymentHandler(paymentUseCase)
 
-	serverHttp := server.NewServerHttp(adminHandler, userHandler, restaurantHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler, couponHandler, categoryHandler, JWTmiddleware)
+	serverHttp := server.NewServerHttp(adminHandler, userHandler, restaurantHandler, dishHandler, addressHandler, cartHandler, orderHandler, paymentHandler, couponHandler, categoryHandler, JWTmiddleware,&config.PortMngr)
 
 	return serverHttp, nil
 
