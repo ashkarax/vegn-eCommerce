@@ -38,8 +38,6 @@ jobs:
         script: |
           cd vegn-eCommerce/
           git pull 
-          make swaggoformat
-          make swaggo
           make build
           sudo systemctl restart vegnSourceCodeRunner.service
 
@@ -52,7 +50,5 @@ jobs:
         script: |
           cd vegn-eCommerceLB/
           git pull 
-          make swaggoformat
-          make swaggo
           make build
           sudo systemctl restart vegnSourceCodeRunnerLB.service

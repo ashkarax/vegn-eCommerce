@@ -412,7 +412,7 @@ paths:
       security:
       - UserAuthTokenAuth: []
       - UserRefTokenAuth: []
-      summary: AddNewAddress
+      summary: AddNewAddress Updated
       tags:
       - Address
   /address/{addressId}:

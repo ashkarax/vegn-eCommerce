@@ -70,7 +70,7 @@ const docTemplate = `{
                 "tags": [
                     "Address"
                 ],
-                "summary": "AddNewAddress",
+                "summary": "AddNewAddress Updated",
                 "parameters": [
                     {
                         "description": "New address data.",
