@@ -42,7 +42,7 @@ jobs:
           sudo systemctl restart vegnSourceCodeRunner.service
 
     - name: Deploy to vegn-eCommerceLB
-      uses: appleboy/ssh-action@v0.4.0
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.PUBLIC_IP }}
         username: ubuntu
