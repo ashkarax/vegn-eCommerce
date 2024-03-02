@@ -37,8 +37,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd vegn-eCommerce/
-          git pull origin master
-          rm -r docs
+          git pull 
           make swaggoformat
           make swaggo
           make build
@@ -52,8 +51,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd vegn-eCommerceLB/
-          git pull origin master
-          rm -r docs
+          git pull 
           make swaggoformat
           make swaggo
           make build
