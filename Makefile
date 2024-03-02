@@ -11,6 +11,7 @@ buildrun:
 
 swaggo:
 	swag init -g ./cmd/main.go
+	
 swaggoformat:
 	swag fmt	
 
