@@ -40,6 +40,8 @@ jobs:
           git pull origin master
           make swaggo
           make swaggoformat
+          sudo systemctl stop vegnSourceCodeRunner.service
+          sudo rm vegnExecutableFile 
           make build
           sudo systemctl restart vegnSourceCodeRunner.service
 
@@ -54,5 +56,7 @@ jobs:
           git pull origin master
           make swaggo
           make swaggoformat
+          sudo systemctl stop vegnSourceCodeRunnerLB.service
+          sudo rm vegnExecutableFile 
           make build
           sudo systemctl restart vegnSourceCodeRunnerLB.service
