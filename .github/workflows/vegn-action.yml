@@ -1,0 +1,53 @@
+name: vegn-Ecommerce-CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.17.x'
+
+    - name: Build
+      run: make build
+
+    - name: Test
+      run: make test
+
+    - name: Configure SSH
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to vegn-eCommerce
+      uses: appleboy/ssh-action@v0.4.0
+      with:
+        host: ${{ secrets.PUBLIC_IP }}
+        username: ubuntu
+        script: |
+          cd vegn-eCommerce/
+          git pull origin master
+          make build
+          sudo systemctl restart vegnSourceCodeRunner.service
+
+    - name: Deploy to vegn-eCommerceLB
+      uses: appleboy/ssh-action@v0.4.0
+      with:
+        host: ${{ secrets.PUBLIC_IP }}
+        username: ubuntu
+        script: |
+          cd vegn-eCommerceLB/
+          git pull origin master
+          make build
+          sudo systemctl restart vegnSourceCodeRunnerLB.service
