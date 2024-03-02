@@ -69,7 +69,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Address"
+                    "Address updated"
                 ],
                 "summary": "AddNewAddress",
                 "parameters": [

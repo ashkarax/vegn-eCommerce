@@ -20,7 +20,7 @@ func NewAddressHandler(addressUseCase interfaceUseCase.IAddressUseCase) *Address
 
 //	@Summary		AddNewAddress
 //	@Description	Adds a new address for the current user.
-//	@Tags			Address
+//	@Tags			Address updated
 //	@Accept			json
 //	@Produce		json
 //	@Security		UserAuthTokenAuth

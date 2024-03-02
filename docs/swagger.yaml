@@ -414,7 +414,7 @@ paths:
       - UserRefTokenAuth: []
       summary: AddNewAddress
       tags:
-      - Address
+      - Address updated
   /address/{addressId}:
     patch:
       consumes:
