@@ -52,7 +52,7 @@
                         "UserRefTokenAuth": []
                     }
                 ],
-                "description": "Adds a new address for the current user.",
+                "description": "Adds a new address for the current user",
                 "consumes": [
                     "application/json"
                 ],
@@ -60,7 +60,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Address updated"
+                    "Address"
                 ],
                 "summary": "AddNewAddress",
                 "parameters": [
