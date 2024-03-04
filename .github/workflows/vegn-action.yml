@@ -39,7 +39,7 @@ jobs:
           whoami
           go version
           echo $PATH
-          export PATH=$PATH:/path/to/go/bin
+          export PATH=$PATH:/usr/local/go/bin
           echo $PATH
           cd vegn-eCommerce/
           git pull 
@@ -56,7 +56,7 @@ jobs:
           whoami
           echo $PATH
           go version
-          export PATH=$PATH:/path/to/go/bin
+          export PATH=$PATH:/usr/local/go/bin
           cd vegn-eCommerceLB/
           git pull 
           make build
