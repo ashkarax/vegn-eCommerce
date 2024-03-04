@@ -104,14 +104,13 @@ func TestGetLatestUsers(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		stub    func(mocks.MockIuserRepo)
+		stub    func(*mocks.MockIuserRepo)
 		want    *[]responsemodels.UserDetails
 		wantErr error
 	}{
 		{
 			name: "success",
-
-			stub: func(userRepo mocks.MockIuserRepo) {
+			stub: func(userRepo *mocks.MockIuserRepo) {
 				userRepo.EXPECT().GetLatestUsers().Times(1).Return(&[]responsemodels.UserDetails{{
 					Id:    1,
 					FName: "Ashkar",
@@ -144,7 +143,7 @@ func TestGetLatestUsers(t *testing.T) {
 		},
 		{
 			name: "failure",
-			stub: func(userRepo mocks.MockIuserRepo) {
+			stub: func(userRepo *mocks.MockIuserRepo) {
 				userRepo.EXPECT().GetLatestUsers().Return(&[]responsemodels.UserDetails{}, errors.New("error fetching data"))
 
 			},
@@ -155,8 +154,139 @@ func TestGetLatestUsers(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			tc.stub(*mockUserRepo)
+			tc.stub(mockUserRepo)
 			result, err := userUseCase.GetLatestUsers()
+			assert.Equal(t, tc.want, result)
+			assert.Equal(t, tc.wantErr, err)
+		})
+	}
+}
+
+func TestUserProfile(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+
+	mockUserRepo := mocks.NewMockIuserRepo(mockCtrl)
+	userUseCase := NewUserUseCase(mockUserRepo, &config.Token{})
+
+	tests := []struct {
+		name    string
+		input   string
+		stub    func(*mocks.MockIuserRepo, string)
+		want    *responsemodels.UserDetails
+		wantErr error
+	}{
+		{
+			name:  "success",
+			input: "1",
+			stub: func(userRepo *mocks.MockIuserRepo, input string) {
+				userRepo.EXPECT().GetUserProfile(&input).Times(1).Return(&responsemodels.UserDetails{
+					Id:    1,
+					FName: "Ashkar",
+					LName: "A.S",
+					Email: "ashkar@example.com",
+					Phone: "+910000000000",
+				}, nil)
+
+			},
+			want: &responsemodels.UserDetails{
+				Id:    1,
+				FName: "Ashkar",
+				LName: "A.S",
+				Email: "ashkar@example.com",
+				Phone: "+910000000000",
+			},
+			wantErr: nil,
+		},
+		{
+			name:  "failure",
+			input: "1",
+			stub: func(userRepo *mocks.MockIuserRepo, input string) {
+				userRepo.EXPECT().GetUserProfile(&input).Times(1).Return(&responsemodels.UserDetails{}, errors.New("error fetching data"))
+			},
+			want:    &responsemodels.UserDetails{},
+			wantErr: errors.New("error fetching data"),
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			tc.stub(mockUserRepo, tc.input)
+			result, err := userUseCase.UserProfile(&tc.input)
+			assert.Equal(t, tc.want, result)
+			assert.Equal(t, tc.wantErr, err)
+		})
+	}
+}
+
+func TestUserByStatus(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+
+	mockUserRepo := mocks.NewMockIuserRepo(mockCtrl)
+	userUseCase := NewUserUseCase(mockUserRepo, &config.Token{})
+
+	tests := []struct {
+		name    string
+		input   string
+		stub    func(*mocks.MockIuserRepo, string)
+		want    *[]responsemodels.UserDetails
+		wantErr error
+	}{
+		{
+			name:  "success",
+			input: "pending",
+			stub: func(userRepo *mocks.MockIuserRepo, input string) {
+				userRepo.EXPECT().GetUserByStatus(input).Times(1).Return(&[]responsemodels.UserDetails{{
+					Id:    1,
+					FName: "Ashkar",
+					LName: "A.S",
+					Email: "ashkar@example.com",
+					Phone: "+910000000000",
+					Status: "pending",
+				}, {
+					Id:    2,
+					FName: "Vajid",
+					LName: "Hussain",
+					Email: "vajid@example.com",
+					Phone: "+910000000000",
+					Status: "pending",
+
+				}}, nil)
+
+			},
+			want: &[]responsemodels.UserDetails{{
+				Id:    1,
+				FName: "Ashkar",
+				LName: "A.S",
+				Email: "ashkar@example.com",
+				Phone: "+910000000000",
+				Status: "pending",
+
+			}, {
+				Id:    2,
+				FName: "Vajid",
+				LName: "Hussain",
+				Email: "vajid@example.com",
+				Phone: "+910000000000",
+				Status: "pending",
+
+			}},
+			wantErr: nil,
+		},
+		{
+			name:  "failure",
+			input: "pending",
+			stub: func(userRepo *mocks.MockIuserRepo, input string) {
+				userRepo.EXPECT().GetUserByStatus(input).Times(1).Return(&[]responsemodels.UserDetails{}, errors.New("error fetching data"))
+			},
+			want:    &[]responsemodels.UserDetails{},
+			wantErr: errors.New("error fetching data"),
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			tc.stub(mockUserRepo, tc.input)
+			result, err := userUseCase.UserByStatus(tc.input)
 			assert.Equal(t, tc.want, result)
 			assert.Equal(t, tc.wantErr, err)
 		})
