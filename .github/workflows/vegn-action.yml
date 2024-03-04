@@ -36,6 +36,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          whoami
           cd vegn-eCommerce/
           git pull 
           make build
@@ -48,6 +49,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          whoami
           cd vegn-eCommerceLB/
           git pull 
           make build
