@@ -38,7 +38,9 @@ jobs:
         script: |
           whoami
           go version
+          echo $PATH
           export PATH=$PATH:/path/to/go/bin
+          echo $PATH
           cd vegn-eCommerce/
           git pull 
           make build
