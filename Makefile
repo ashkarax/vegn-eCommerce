@@ -10,8 +10,8 @@ buildrun:
 	./cmd/vegnExecutableFile
 
 swaggo:
-	swag init -g ./cmd/main.go
-	
+	swag init -g ./internal/infrastructure/api/server.go
+
 swaggoformat:
 	swag fmt	
 

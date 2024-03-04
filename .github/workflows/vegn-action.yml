@@ -52,6 +52,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           whoami
+          echo $PATH
           go version
           export PATH=$PATH:/path/to/go/bin
           cd vegn-eCommerceLB/

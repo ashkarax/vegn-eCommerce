@@ -60,7 +60,7 @@ const docTemplate = `{
                         "UserRefTokenAuth": []
                     }
                 ],
-                "description": "Adds a new address for the current user,updated today",
+                "description": "Adds a new address for the current user,updated today check -g success",
                 "consumes": [
                     "application/json"
                 ],
@@ -2343,49 +2343,17 @@ const docTemplate = `{
                 }
             }
         }
-    },
-    "securityDefinitions": {
-        "AdminRefTokenAuth": {
-            "type": "apiKey",
-            "name": "refreshtoken",
-            "in": "header"
-        },
-        "OtpTempTokenAuth": {
-            "type": "apiKey",
-            "name": "Authorizations",
-            "in": "header"
-        },
-        "RestaurantAuthTokenAuth": {
-            "type": "apiKey",
-            "name": "accesstoken",
-            "in": "header"
-        },
-        "RestaurantRefTokenAuth": {
-            "type": "apiKey",
-            "name": "refreshtoken",
-            "in": "header"
-        },
-        "UserAuthTokenAuth": {
-            "type": "apiKey",
-            "name": "accesstoken",
-            "in": "header"
-        },
-        "UserRefTokenAuth": {
-            "type": "apiKey",
-            "name": "refreshtoken",
-            "in": "header"
-        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Go + Gin Veg*n.",
-	Description:      "Online Veg Food Delivery.",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
