@@ -60,7 +60,7 @@ const docTemplate = `{
                         "UserRefTokenAuth": []
                     }
                 ],
-                "description": "Adds a new address for the current user",
+                "description": "Adds a new address for the current user,updated today",
                 "consumes": [
                     "application/json"
                 ],
@@ -70,7 +70,7 @@ const docTemplate = `{
                 "tags": [
                     "Address"
                 ],
-                "summary": "AddNewAddress Updated",
+                "summary": "AddNewAddress.",
                 "parameters": [
                     {
                         "description": "New address data.",

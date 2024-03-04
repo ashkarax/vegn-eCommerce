@@ -390,7 +390,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Adds a new address for the current user
+      description: Adds a new address for the current user,updated today
       parameters:
       - description: New address data.
         in: body
@@ -412,7 +412,7 @@ paths:
       security:
       - UserAuthTokenAuth: []
       - UserRefTokenAuth: []
-      summary: AddNewAddress Updated
+      summary: AddNewAddress.
       tags:
       - Address
   /address/{addressId}:

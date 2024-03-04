@@ -17,8 +17,8 @@ func NewAddressHandler(addressUseCase interfaceUseCase.IAddressUseCase) *Address
 	return &AddressHandler{AddressUseCase: addressUseCase}
 }
 
-// @Summary		AddNewAddress Updated
-// @Description	Adds a new address for the current user
+// @Summary		AddNewAddress.
+// @Description	Adds a new address for the current user,updated today
 // @Tags			Address
 // @Accept			json
 // @Produce		json
