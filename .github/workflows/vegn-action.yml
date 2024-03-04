@@ -37,6 +37,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           whoami
+          export PATH=$PATH:/path/to/go/bin
           cd vegn-eCommerce/
           git pull 
           make build
@@ -50,6 +51,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           whoami
+          export PATH=$PATH:/path/to/go/bin
           cd vegn-eCommerceLB/
           git pull 
           make build
