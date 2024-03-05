@@ -36,11 +36,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          whoami
-          go version
-          echo $PATH
           export PATH=$PATH:/usr/local/go/bin
-          echo $PATH
           cd vegn-eCommerce/
           git pull 
           make build
@@ -53,9 +49,6 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          whoami
-          echo $PATH
-          go version
           export PATH=$PATH:/usr/local/go/bin
           cd vegn-eCommerceLB/
           git pull 

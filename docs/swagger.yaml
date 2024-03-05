@@ -387,8 +387,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Adds a new address for the current user,updated today check -g
-        success
+      description: Adds a new address for the current user.
       parameters:
       - description: New address data.
         in: body

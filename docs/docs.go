@@ -60,7 +60,7 @@ const docTemplate = `{
                         "UserRefTokenAuth": []
                     }
                 ],
-                "description": "Adds a new address for the current user,updated today check -g success",
+                "description": "Adds a new address for the current user.",
                 "consumes": [
                     "application/json"
                 ],
