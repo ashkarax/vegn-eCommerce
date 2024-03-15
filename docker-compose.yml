@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: vegn-eCommerce-postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=vegn
+    networks:
+      - project-net-bridge
+    volumes:
+      - project-volume:/var/lib/postgresql/data
+    hostname: postgresdb
+
+  vegn-docker:
+    image: vegn-server:latest
+    build: .
+    restart: on-failure
+    container_name: vegn-eCommerce-server
+    depends_on:
+      - postgres
+    networks:
+      - project-net-bridge
+    ports:
+      - "8080:8080"
+    environment:
+      - DBHOST=postgresdb
+      - DBPASSWORD=postgres
+
+
+volumes:
+  project-volume:
+networks:
+  project-net-bridge:
+    driver: bridge
+  

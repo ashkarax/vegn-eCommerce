@@ -142,10 +142,6 @@ func (d *DishRepo) GetAllDishesForUser() (*[]responsemodels.DishRes, error) {
 
 	r := d.DB.Raw("SELECT * FROM dishes  LEFT JOIN category_offers  ON category_offers.category_id = dishes.category_id AND category_offers.restaurant_id = dishes.restaurant_id AND category_offers.offer_status = 'active' AND category_offers.end_date >= now() WHERE dishes.availability=true AND dishes.remaining_quantity>0;").Scan(&resMap)
 
-	if r.RowsAffected == 0 {
-		errMessage := fmt.Sprintf("No results found,Rows affected:%d", r.RowsAffected)
-		return &resMap, errors.New(errMessage)
-	}
 	if r.Error != nil {
 		return &resMap, r.Error
 	}

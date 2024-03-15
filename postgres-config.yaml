@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  postgres-db: vegn
+  postgres-host: postgres-service
+  postgres-port: "5432"
+  
